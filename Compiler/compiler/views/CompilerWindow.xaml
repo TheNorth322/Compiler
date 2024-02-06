@@ -115,9 +115,11 @@
         </ToolBarTray>
 
         <!--Text editor -->
-        <RichTextBox Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                     Style="{StaticResource NotMaterialDesignStyle}" />
-
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <RichTextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         Style="{StaticResource NotMaterialDesignStyle}" />
+        </ScrollViewer>
+        
         <DataGrid
             Grid.Row="3"
             AutoGenerateColumns="False"
@@ -134,7 +136,7 @@
                     Binding="{Binding Index}"
                     Header="{StaticResource IndexHeader}">
                 </materialDesign:DataGridTextColumn>
-                
+
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding FilePath}"
                     Header="{StaticResource FilePathHeader}"
