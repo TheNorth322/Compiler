@@ -1,0 +1,48 @@
+﻿<Window x:Class="Compiler.CompilerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Compiler"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Menu>
+            <MenuItem Header="{StaticResource FileHeader}">
+                <MenuItem Header="{StaticResource CreateHeader}" />
+                <MenuItem Header="{StaticResource OpenHeader}" />
+                <MenuItem Header="{StaticResource SaveHeader}" />
+                <MenuItem Header="{StaticResource SaveAsHeader}" />
+                <MenuItem Header="{StaticResource ExitHeader}" />
+            </MenuItem>
+
+            <MenuItem Header="{StaticResource EditHeader}">
+                <MenuItem Header="{StaticResource CancelHeader}" />
+                <MenuItem Header="{StaticResource RepeatHeader}" />
+                <MenuItem Header="{StaticResource CutHeader}" />
+                <MenuItem Header="{StaticResource CopyHeader}" />
+                <MenuItem Header="{StaticResource PutHeader}" />
+                <MenuItem Header="{StaticResource DeleteHeader}" />
+                <MenuItem Header="{StaticResource SelectAllHeader}" />
+            </MenuItem>
+
+            <MenuItem Header="{StaticResource TextHeader}">
+                <MenuItem Header="{StaticResource TaskHeader}" />
+                <MenuItem Header="{StaticResource GrammarHeader}" />
+                <MenuItem Header="{StaticResource GrammarClassificationHeader}" />
+                <MenuItem Header="{StaticResource AnalyzationMethodHeader}" />
+                <MenuItem Header="{StaticResource DiagnosisHeader}" />
+                <MenuItem Header="{StaticResource ExampleHeader}" />
+                <MenuItem Header="{StaticResource BooksHeader}" />
+                <MenuItem Header="{StaticResource SourceCodeHeader}" />
+            </MenuItem>
+
+            <MenuItem Header="{StaticResource StartHeader}" />
+
+            <MenuItem Header="{StaticResource ReferenceHeader}">
+                <MenuItem Header="{StaticResource CallReferenceHeader}" />
+                <MenuItem Header="{StaticResource ProgrammDescriptionHeader}" />
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>

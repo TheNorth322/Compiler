@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <system:String x:Key="FileHeader">Файл</system:String>
+    <system:String x:Key="EditHeader">Правка</system:String>
+    <system:String x:Key="TextHeader">Текст</system:String>
+    <system:String x:Key="StartHeader">Пуск</system:String>
+    <system:String x:Key="ReferenceHeader">Справка</system:String>
+
+    <system:String x:Key="CreateHeader">Создать</system:String>
+    <system:String x:Key="OpenHeader">Открыть</system:String>
+    <system:String x:Key="SaveHeader">Сохранить</system:String>
+    <system:String x:Key="SaveAsHeader">Сохранить как</system:String>
+    <system:String x:Key="ExitHeader">Выйти</system:String>
+
+    <system:String x:Key="CancelHeader">Отменить</system:String>
+    <system:String x:Key="RepeatHeader">Повторить</system:String>
+    <system:String x:Key="CutHeader">Вырезать</system:String>
+    <system:String x:Key="CopyHeader">Копировать</system:String>
+    <system:String x:Key="PutHeader">Вставить</system:String>
+    <system:String x:Key="DeleteHeader">Удалить</system:String>
+    <system:String x:Key="SelectAllHeader">Выделить все</system:String>
+
+    <system:String x:Key="TaskHeader">Постановка задачи</system:String>
+    <system:String x:Key="GrammarHeader">Грамматика</system:String>
+    <system:String x:Key="GrammarClassificationHeader">Классификация грамматики</system:String>
+    <system:String x:Key="AnalyzationMethodHeader">Метод анализа</system:String>
+    <system:String x:Key="DiagnosisHeader">Диагностика и нейтрализация ошибок</system:String>
+    <system:String x:Key="ExampleHeader">Тестовый пример</system:String>
+    <system:String x:Key="BooksHeader">Список литературы</system:String>
+    <system:String x:Key="SourceCodeHeader">Исходный код программы</system:String>
+
+    <system:String x:Key="CallReferenceHeader">Вызов справки</system:String>
+    <system:String x:Key="ProgrammDescriptionHeader">О программе</system:String>
+</ResourceDictionary>
