@@ -10,12 +10,12 @@
         xmlns:views="clr-namespace:Compiler.compiler.views"
         d:DataContext="{d:DesignInstance Type=viewModels:CompilerViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Compiler" Height="450" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:TextEditorViewModel}">
-            <views:TextEditorUserControl/>
+            <views:TextEditorUserControl />
         </DataTemplate>
-    </Window.Resources>    
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,7 +26,7 @@
         <Menu>
             <MenuItem Header="{StaticResource FileHeader}">
                 <MenuItem Command="{Binding}" Header="{StaticResource CreateHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource OpenHeader}" />
+                <MenuItem Command="{Binding OpenCommand}" Header="{StaticResource OpenHeader}" />
                 <MenuItem Command="{Binding}" Header="{StaticResource SaveHeader}" />
                 <MenuItem Command="{Binding}" Header="{StaticResource SaveAsHeader}" />
                 <MenuItem Command="{Binding ExitCommand}" Header="{StaticResource ExitHeader}" />
@@ -72,7 +72,7 @@
                     Content="{materialDesign:PackIcon Kind=FileDocumentAdd}"
                     ToolTip="{StaticResource CreateHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding OpenCommand}"
                     Content="{materialDesign:PackIcon Kind=FileSearch}"
                     ToolTip="{StaticResource OpenHeader}" />
                 <Button
@@ -116,8 +116,21 @@
 
             </ToolBar>
         </ToolBarTray>
-        
+
         <!--File tabs -->
-        <ContentControl Grid.Row="2" Content="{Binding SelectedTextEditorViewModel}"/>
+        <TabControl Grid.Row="2"
+                    HorizontalContentAlignment="Left"
+                    ItemsSource="{Binding TextEditorViewModels}"
+                    SelectedItem="{Binding SelectedTextEditorViewModel}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Text="{Binding Header}" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
     </Grid>
 </Window>

@@ -28,7 +28,7 @@ namespace Compiler
             InitializeComponent();
         }
 
-        public CompilerWindow(CompilerViewModel compilerViewModel) : base()
+        public CompilerWindow(CompilerViewModel compilerViewModel) : this()
         {
             this.DataContext = compilerViewModel;
             compilerViewModel.ExitButtonClicked += OnExitButtonClicked;

@@ -9,7 +9,7 @@
              xmlns:viewModels="clr-namespace:Compiler.compiler.viewModels"
              d:DataContext="{d:DesignInstance Type=viewModels:TextEditorViewModel}"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="TextEditorUserControl_OnLoaded">
     <UserControl.Resources>
         <Style x:Key="NotMaterialDesignStyle" TargetType="RichTextBox"></Style>
     </UserControl.Resources>
@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <!--Text editor -->
         <avalonedit:TextEditor SyntaxHighlighting="{Binding SyntaxHighlightingCode}" x:Name="textEditor" Grid.Row="0"
-                               ShowLineNumbers="True" />
+                               ShowLineNumbers="True" Document="{Binding TextDocument}"/>
 
         <DataGrid
             Grid.Row="1"

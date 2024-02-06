@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using Compiler.compiler.viewModels;
 
 namespace Compiler.compiler.views;
@@ -8,19 +9,17 @@ public partial class TextEditorUserControl : UserControl
     public TextEditorUserControl()
     {
         InitializeComponent();
-        
     }
 
-    public TextEditorUserControl(TextEditorViewModel textEditorViewModel) : base()
+    private void TextEditorUserControl_OnLoaded(object sender, RoutedEventArgs e)
     {
-        this.DataContext = textEditorViewModel;
-        textEditorViewModel.SelectAllButtonClicked += OnSelectAllButtonClicked;
-        textEditorViewModel.CutButtonClicked += OnCutButtonClicked;
-        textEditorViewModel.DeleteButtonClicked += OnDeleteButtonClicked;
-        textEditorViewModel.CopyButtonClicked += OnCopyButtonClicked;
-        textEditorViewModel.PutButtonClicked += OnPasteButtonClicked;
-        textEditorViewModel.CancelButtonClicked += OnCancelButtonClicked;
-        textEditorViewModel.RepeatButtonClicked += OnRepeatButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).SelectAllButtonClicked += OnSelectAllButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).CutButtonClicked += OnCutButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).DeleteButtonClicked += OnDeleteButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).CopyButtonClicked += OnCopyButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).PutButtonClicked += OnPasteButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).CancelButtonClicked += OnCancelButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).RepeatButtonClicked += OnRepeatButtonClicked;
     }
 
     private void OnCancelButtonClicked()

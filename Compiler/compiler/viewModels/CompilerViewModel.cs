@@ -31,7 +31,7 @@ public class CompilerViewModel : ViewModelBase
     public ICommand OpenCommand { get; }
     public ICommand SaveAsCommand { get; }
     public Action ExitButtonClicked { get; set; }
-    
+
 
     public CompilerViewModel(FileUseCase fileUseCase, TextUseCase textUseCase,
         CompilerUseCase compilerUseCase, ReferenceUseCase referenceUseCase)
@@ -52,7 +52,7 @@ public class CompilerViewModel : ViewModelBase
         _textUseCase = textUseCase;
         _compilerUseCase = compilerUseCase;
         _referenceUseCase = referenceUseCase;
-        
+
         _textEditorsViewModels = new ObservableCollection<TextEditorViewModel>();
     }
 
@@ -65,8 +65,18 @@ public class CompilerViewModel : ViewModelBase
             _selectedTextEditor = value;
             OnPropertyChanged(nameof(SelectedTextEditorViewModel));
         }
-        
     }
+
+    public ObservableCollection<TextEditorViewModel> TextEditorViewModels
+    {
+        get => _textEditorsViewModels;
+        set
+        {
+            _textEditorsViewModels = value;
+            OnPropertyChanged(nameof(TextEditorViewModels));
+        }
+    }
+
     private void CancelExecute(object param)
     {
         SelectedTextEditorViewModel.CancelButtonClicked?.Invoke();
@@ -74,7 +84,7 @@ public class CompilerViewModel : ViewModelBase
 
     private void RepeatExecute(object param)
     {
-       SelectedTextEditorViewModel.RepeatButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.RepeatButtonClicked?.Invoke();
     }
 
     private void SelectAllExecute(object param)
@@ -114,18 +124,20 @@ public class CompilerViewModel : ViewModelBase
     private void OpenExecute(object param)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
-        if (openFileDialog.ShowDialog() == DialogResult.Yes && openFileDialog.CheckFileExists)
+        openFileDialog.ShowDialog(); 
+        if (openFileDialog.CheckFileExists)
         {
             string filePath = openFileDialog.FileName;
             FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
+            TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
+                fileInfo.FileExtension, fileInfo.FileContents);
+            _textEditorsViewModels.Add(vm);
+            _selectedTextEditor = vm;
         }
     }
 
     private void SaveAsExecute(object param)
     {
-    }
-
-    private void GetSyntaxHighlightingCode(string filename)
-    {
+        
     }
 }

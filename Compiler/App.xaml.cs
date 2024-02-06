@@ -5,6 +5,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Compiler.compiler.viewModels;
+using Compiler.data.service;
+using Compiler.domain.useCases;
 
 namespace Compiler
 {
@@ -15,7 +18,10 @@ namespace Compiler
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            this.MainWindow = new CompilerWindow();
+            CompilerViewModel compilerViewModel = new CompilerViewModel(new FileUseCase(new FileService()),
+                new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService()),
+                new ReferenceUseCase(new ReferenceService()));
+            this.MainWindow = new CompilerWindow(compilerViewModel);
             MainWindow.Show();
             base.OnStartup(e);
         }

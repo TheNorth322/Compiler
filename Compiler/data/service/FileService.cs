@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using Compiler.data.interfaces;
+using Compiler.domain.repository;
 using FileInfo = Compiler.domain.entity.FileInfo;
 
 namespace Compiler.data.service;
 
-public class FileService : IFileService
+public class FileService : IFileRepository
 {
     public void CreateFile()
     {
@@ -22,7 +22,7 @@ public class FileService : IFileService
         int bytesRead = fileStream.Read(buffer, 0, buffer.Length);
         string fileContent = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-        return new FileInfo(GetFileName(filePath), filePath, fileContent);
+        return new FileInfo(GetFileName(filePath), filePath, GetFileExtension(filePath), fileContent);
     }
 
     public void SaveFile()
@@ -38,5 +38,10 @@ public class FileService : IFileService
     private string GetFileName(string filePath)
     {
         return Path.GetFileName(filePath);
-    }  
+    }
+
+    private string GetFileExtension(string filePath)
+    {
+        return Path.GetExtension(filePath);
+    }
 }
