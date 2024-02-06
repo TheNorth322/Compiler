@@ -4,45 +4,105 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Compiler"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Menu>
-            <MenuItem Header="{StaticResource FileHeader}">
-                <MenuItem Header="{StaticResource CreateHeader}" />
-                <MenuItem Header="{StaticResource OpenHeader}" />
-                <MenuItem Header="{StaticResource SaveHeader}" />
-                <MenuItem Header="{StaticResource SaveAsHeader}" />
-                <MenuItem Header="{StaticResource ExitHeader}" />
-            </MenuItem>
+        <StackPanel>
+            <!--Topbar menu -->
+            <Menu>
+                <MenuItem Header="{StaticResource FileHeader}">
+                    <MenuItem Header="{StaticResource CreateHeader}" />
+                    <MenuItem Header="{StaticResource OpenHeader}" />
+                    <MenuItem Header="{StaticResource SaveHeader}" />
+                    <MenuItem Header="{StaticResource SaveAsHeader}" />
+                    <MenuItem Header="{StaticResource ExitHeader}" />
+                </MenuItem>
 
-            <MenuItem Header="{StaticResource EditHeader}">
-                <MenuItem Header="{StaticResource CancelHeader}" />
-                <MenuItem Header="{StaticResource RepeatHeader}" />
-                <MenuItem Header="{StaticResource CutHeader}" />
-                <MenuItem Header="{StaticResource CopyHeader}" />
-                <MenuItem Header="{StaticResource PutHeader}" />
-                <MenuItem Header="{StaticResource DeleteHeader}" />
-                <MenuItem Header="{StaticResource SelectAllHeader}" />
-            </MenuItem>
+                <MenuItem Header="{StaticResource EditHeader}">
+                    <MenuItem Header="{StaticResource CancelHeader}" />
+                    <MenuItem Header="{StaticResource RepeatHeader}" />
+                    <MenuItem Header="{StaticResource CutHeader}" />
+                    <MenuItem Header="{StaticResource CopyHeader}" />
+                    <MenuItem Header="{StaticResource PutHeader}" />
+                    <MenuItem Header="{StaticResource DeleteHeader}" />
+                    <MenuItem Header="{StaticResource SelectAllHeader}" />
+                </MenuItem>
 
-            <MenuItem Header="{StaticResource TextHeader}">
-                <MenuItem Header="{StaticResource TaskHeader}" />
-                <MenuItem Header="{StaticResource GrammarHeader}" />
-                <MenuItem Header="{StaticResource GrammarClassificationHeader}" />
-                <MenuItem Header="{StaticResource AnalyzationMethodHeader}" />
-                <MenuItem Header="{StaticResource DiagnosisHeader}" />
-                <MenuItem Header="{StaticResource ExampleHeader}" />
-                <MenuItem Header="{StaticResource BooksHeader}" />
-                <MenuItem Header="{StaticResource SourceCodeHeader}" />
-            </MenuItem>
+                <MenuItem Header="{StaticResource TextHeader}">
+                    <MenuItem Header="{StaticResource TaskHeader}" />
+                    <MenuItem Header="{StaticResource GrammarHeader}" />
+                    <MenuItem Header="{StaticResource GrammarClassificationHeader}" />
+                    <MenuItem Header="{StaticResource AnalyzationMethodHeader}" />
+                    <MenuItem Header="{StaticResource DiagnosisHeader}" />
+                    <MenuItem Header="{StaticResource ExampleHeader}" />
+                    <MenuItem Header="{StaticResource BooksHeader}" />
+                    <MenuItem Header="{StaticResource SourceCodeHeader}" />
+                </MenuItem>
 
-            <MenuItem Header="{StaticResource StartHeader}" />
+                <MenuItem Header="{StaticResource StartHeader}" />
 
-            <MenuItem Header="{StaticResource ReferenceHeader}">
-                <MenuItem Header="{StaticResource CallReferenceHeader}" />
-                <MenuItem Header="{StaticResource ProgrammDescriptionHeader}" />
-            </MenuItem>
-        </Menu>
+                <MenuItem Header="{StaticResource ReferenceHeader}">
+                    <MenuItem Header="{StaticResource CallReferenceHeader}" />
+                    <MenuItem Header="{StaticResource ProgrammDescriptionHeader}" />
+                </MenuItem>
+            </Menu>
+
+            <!--Button menu -->
+            <ToolBarTray>
+                <ToolBar
+                    ClipToBounds="False"
+                    Style="{StaticResource MaterialDesignToolBar}">
+
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=FileDocumentAdd}"
+                        ToolTip="{StaticResource CreateHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=FileSearch}"
+                        ToolTip="{StaticResource OpenHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=ContentSave}"
+                        ToolTip="{StaticResource SaveHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=ArrowLeft}"
+                        ToolTip="{StaticResource CancelHeader}" />
+                    
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=Repeat}"
+                        ToolTip="{StaticResource RepeatHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=ContentCopy}"
+                        ToolTip="{StaticResource CopyHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=ContentCut}"
+                        ToolTip="{StaticResource CutHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=Import}"
+                        ToolTip="{StaticResource PutHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=Play}"
+                        ToolTip="{StaticResource StartHeader}" />
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=HelpCircle}"
+                        ToolTip="{StaticResource CallReferenceHeader}" />
+                    
+                    <Button
+                        Command="{Binding}"
+                        Content="{materialDesign:PackIcon Kind=InformationVariantCircle}"
+                        ToolTip="{StaticResource ProgrammDescriptionHeader}" />
+                    
+                </ToolBar>
+            </ToolBarTray>
+        </StackPanel>
     </Grid>
 </Window>
