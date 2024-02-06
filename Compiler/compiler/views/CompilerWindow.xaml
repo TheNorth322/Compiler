@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Compiler"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewModels="clr-namespace:Compiler.compiler.viewModels"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         d:DataContext="{d:DesignInstance Type=viewModels:CompilerViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -77,24 +78,24 @@
                     Content="{materialDesign:PackIcon Kind=ContentSave}"
                     ToolTip="{StaticResource SaveHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding CancelCommand}"
                     Content="{materialDesign:PackIcon Kind=ArrowLeft}"
                     ToolTip="{StaticResource CancelHeader}" />
 
                 <Button
-                    Command="{Binding}"
-                    Content="{materialDesign:PackIcon Kind=Repeat}"
+                    Command="{Binding RepeatCommand}"
+                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
                     ToolTip="{StaticResource RepeatHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding CopyCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentCopy}"
                     ToolTip="{StaticResource CopyHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding CutCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentCut}"
                     ToolTip="{StaticResource CutHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding PutCommand}"
                     Content="{materialDesign:PackIcon Kind=Import}"
                     ToolTip="{StaticResource PutHeader}" />
                 <Button
@@ -115,10 +116,12 @@
         </ToolBarTray>
 
         <!--Text editor -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <avalonedit:TextEditor x:Name="textEditor" Grid.Row="2" ShowLineNumbers="True"/>
+        
+        <!--ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <RichTextBox x:Name="textEditor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                          Style="{StaticResource NotMaterialDesignStyle}" />
-        </ScrollViewer>
+        </ScrollViewer-->
         
         <DataGrid
             Grid.Row="3"

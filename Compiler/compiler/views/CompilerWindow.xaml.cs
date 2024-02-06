@@ -68,7 +68,7 @@ namespace Compiler
 
         private void OnDeleteButtonClicked()
         {
-            textEditor.Selection.Text = string.Empty;
+            textEditor.Text = string.Empty;
         }
 
         private void OnSelectAllButtonClicked()

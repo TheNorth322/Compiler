@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
       <PackageReference Include="MaterialDesignColors" Version="3.0.0-ci528" />
       <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci528" />
     </ItemGroup>
