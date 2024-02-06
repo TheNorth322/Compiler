@@ -22,39 +22,39 @@
         <!--Topbar menu -->
         <Menu>
             <MenuItem Header="{StaticResource FileHeader}">
-                <MenuItem Header="{StaticResource CreateHeader}" />
-                <MenuItem Header="{StaticResource OpenHeader}" />
-                <MenuItem Header="{StaticResource SaveHeader}" />
-                <MenuItem Header="{StaticResource SaveAsHeader}" />
-                <MenuItem Header="{StaticResource ExitHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource CreateHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource OpenHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource SaveHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource SaveAsHeader}" />
+                <MenuItem Command="{Binding ExitCommand}" Header="{StaticResource ExitHeader}" />
             </MenuItem>
 
             <MenuItem Header="{StaticResource EditHeader}">
-                <MenuItem Header="{StaticResource CancelHeader}" />
-                <MenuItem Header="{StaticResource RepeatHeader}" />
-                <MenuItem Header="{StaticResource CutHeader}" />
-                <MenuItem Header="{StaticResource CopyHeader}" />
-                <MenuItem Header="{StaticResource PutHeader}" />
-                <MenuItem Header="{StaticResource DeleteHeader}" />
-                <MenuItem Header="{StaticResource SelectAllHeader}" />
+                <MenuItem Command="{Binding CancelCommand}" Header="{StaticResource CancelHeader}" />
+                <MenuItem Command="{Binding RepeatCommand}" Header="{StaticResource RepeatHeader}" />
+                <MenuItem Command="{Binding CutCommand}" Header="{StaticResource CutHeader}" />
+                <MenuItem Command="{Binding CopyCommand}" Header="{StaticResource CopyHeader}" />
+                <MenuItem Command="{Binding PutCommand}" Header="{StaticResource PutHeader}" />
+                <MenuItem Command="{Binding DeleteCommand}" Header="{StaticResource DeleteHeader}" />
+                <MenuItem Command="{Binding SelectAllCommand}" Header="{StaticResource SelectAllHeader}" />
             </MenuItem>
 
             <MenuItem Header="{StaticResource TextHeader}">
-                <MenuItem Header="{StaticResource TaskHeader}" />
-                <MenuItem Header="{StaticResource GrammarHeader}" />
-                <MenuItem Header="{StaticResource GrammarClassificationHeader}" />
-                <MenuItem Header="{StaticResource AnalyzationMethodHeader}" />
-                <MenuItem Header="{StaticResource DiagnosisHeader}" />
-                <MenuItem Header="{StaticResource ExampleHeader}" />
-                <MenuItem Header="{StaticResource BooksHeader}" />
-                <MenuItem Header="{StaticResource SourceCodeHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource TaskHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource GrammarHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource GrammarClassificationHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource AnalyzationMethodHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource DiagnosisHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource ExampleHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource BooksHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource SourceCodeHeader}" />
             </MenuItem>
 
-            <MenuItem Header="{StaticResource StartHeader}" />
+            <MenuItem Command="{Binding}" Header="{StaticResource StartHeader}" />
 
             <MenuItem Header="{StaticResource ReferenceHeader}">
-                <MenuItem Header="{StaticResource CallReferenceHeader}" />
-                <MenuItem Header="{StaticResource ProgrammDescriptionHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource CallReferenceHeader}" />
+                <MenuItem Command="{Binding}" Header="{StaticResource ProgrammDescriptionHeader}" />
             </MenuItem>
         </Menu>
 
@@ -116,7 +116,7 @@
 
         <!--Text editor -->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <RichTextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            <RichTextBox x:Name="textEditor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                          Style="{StaticResource NotMaterialDesignStyle}" />
         </ScrollViewer>
         

@@ -2,5 +2,6 @@
 
 public interface IReferenceRepository
 {
-    
+    void CallReference();
+    void OpenProgramDescription();
 }

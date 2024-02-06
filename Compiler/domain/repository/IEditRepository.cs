@@ -1,6 +1,12 @@
 ﻿namespace Compiler.domain.repository;
 
-public class IEditRepository
+public interface IEditRepository
 {
-    
+    void Cancel();
+    void Repeat();
+    void Cut();
+    void Copy();
+    void Put();
+    void Delete();
+    void SelectAll();
 }
