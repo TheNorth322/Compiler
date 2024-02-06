@@ -32,4 +32,11 @@
 
     <system:String x:Key="CallReferenceHeader">Вызов справки</system:String>
     <system:String x:Key="ProgrammDescriptionHeader">О программе</system:String>
+
+    <system:String x:Key="IndexHeader">Индекс</system:String>
+    <system:String x:Key="FilePathHeader">Путь</system:String>
+    <system:String x:Key="LineHeader">Строка</system:String>
+    <system:String x:Key="ColumnHeader">Колонка</system:String>
+    <system:String x:Key="MessageHeader">Сообщение</system:String>
+    
 </ResourceDictionary>
