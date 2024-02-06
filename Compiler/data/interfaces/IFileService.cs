@@ -1,8 +1,8 @@
 ﻿using Compiler.domain.entity;
 
-namespace Compiler.domain.repository;
+namespace Compiler.data.interfaces;
 
-public interface IFileRepository
+public interface IFileService
 {
     void CreateFile();
     FileInfo OpenFile(string filePath);

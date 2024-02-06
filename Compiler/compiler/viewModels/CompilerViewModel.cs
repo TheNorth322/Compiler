@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Compiler.domain.entity;
 using Compiler.domain.useCases;
 using Compiler.utils;
 
@@ -9,9 +11,9 @@ namespace Compiler.compiler.viewModels;
 
 public class CompilerViewModel : ViewModelBase
 {
-    private ObservableCollection<CompilationErrorViewModel> _compilationErrors;
+    private ObservableCollection<TextEditorViewModel> _textEditorsViewModels;
+    private TextEditorViewModel _selectedTextEditor;
     private FileUseCase _fileUseCase;
-    private EditUseCase _editUseCase;
     private TextUseCase _textUseCase;
     private CompilerUseCase _compilerUseCase;
     private ReferenceUseCase _referenceUseCase;
@@ -24,18 +26,14 @@ public class CompilerViewModel : ViewModelBase
     public ICommand PutCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand RepeatCommand { get; }
-    
-    public Action SelectAllButtonClicked { get; set; }
+
+    public ICommand CreateCommand { get; }
+    public ICommand OpenCommand { get; }
+    public ICommand SaveAsCommand { get; }
     public Action ExitButtonClicked { get; set; }
-    public Action CutButtonClicked { get; set; }
-    public Action DeleteButtonClicked { get; set; }
-    public Action CopyButtonClicked { get; set; }
-    public Action PutButtonClicked { get; set; }
-    public Action CancelButtonClicked { get; set; }
-    public Action RepeatButtonClicked { get; set; }
     
-    
-    public CompilerViewModel(FileUseCase fileUseCase, EditUseCase editUseCase, TextUseCase textUseCase,
+
+    public CompilerViewModel(FileUseCase fileUseCase, TextUseCase textUseCase,
         CompilerUseCase compilerUseCase, ReferenceUseCase referenceUseCase)
     {
         SelectAllCommand = new RelayCommand<object>(SelectAllExecute);
@@ -46,39 +44,42 @@ public class CompilerViewModel : ViewModelBase
         PutCommand = new RelayCommand<object>(PutExecute);
         CancelCommand = new RelayCommand<object>(CancelExecute);
         RepeatCommand = new RelayCommand<object>(RepeatExecute);
-        
+        CreateCommand = new RelayCommand<object>(CreateExecute);
+        OpenCommand = new RelayCommand<object>(OpenExecute);
+        SaveAsCommand = new RelayCommand<object>(SaveAsExecute);
+
         _fileUseCase = fileUseCase;
-        _editUseCase = editUseCase;
         _textUseCase = textUseCase;
         _compilerUseCase = compilerUseCase;
         _referenceUseCase = referenceUseCase;
-
-        _compilationErrors = new ObservableCollection<CompilationErrorViewModel>();
+        
+        _textEditorsViewModels = new ObservableCollection<TextEditorViewModel>();
     }
 
 
-    public ObservableCollection<CompilationErrorViewModel> CompilationErrors
+    public TextEditorViewModel SelectedTextEditorViewModel
     {
-        get => _compilationErrors;
+        get => _selectedTextEditor;
         set
         {
-            _compilationErrors = value;
-            OnPropertyChanged(nameof(CompilationErrors));
+            _selectedTextEditor = value;
+            OnPropertyChanged(nameof(SelectedTextEditorViewModel));
         }
+        
     }
-
     private void CancelExecute(object param)
     {
-        CancelButtonClicked?.Invoke(); 
+        SelectedTextEditorViewModel.CancelButtonClicked?.Invoke();
     }
 
     private void RepeatExecute(object param)
     {
-        RepeatButtonClicked?.Invoke();
+       SelectedTextEditorViewModel.RepeatButtonClicked?.Invoke();
     }
+
     private void SelectAllExecute(object param)
     {
-        SelectAllButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.SelectAllButtonClicked?.Invoke();
     }
 
     private void ExitExecute(object param)
@@ -88,21 +89,43 @@ public class CompilerViewModel : ViewModelBase
 
     private void CutExecute(object param)
     {
-        CutButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.CutButtonClicked?.Invoke();
     }
 
     private void DeleteExecute(object param)
     {
-        DeleteButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.DeleteButtonClicked?.Invoke();
     }
 
     private void CopyExecute(object param)
     {
-        CopyButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.CopyButtonClicked?.Invoke();
     }
 
     private void PutExecute(object param)
     {
-        PutButtonClicked?.Invoke();
+        SelectedTextEditorViewModel.PutButtonClicked?.Invoke();
+    }
+
+    private void CreateExecute(object param)
+    {
+    }
+
+    private void OpenExecute(object param)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        if (openFileDialog.ShowDialog() == DialogResult.Yes && openFileDialog.CheckFileExists)
+        {
+            string filePath = openFileDialog.FileName;
+            FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
+        }
+    }
+
+    private void SaveAsExecute(object param)
+    {
+    }
+
+    private void GetSyntaxHighlightingCode(string filename)
+    {
     }
 }

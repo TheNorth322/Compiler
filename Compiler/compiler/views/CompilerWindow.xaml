@@ -7,18 +7,20 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewModels="clr-namespace:Compiler.compiler.viewModels"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:views="clr-namespace:Compiler.compiler.views"
         d:DataContext="{d:DesignInstance Type=viewModels:CompilerViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <Style x:Key="NotMaterialDesignStyle" TargetType="RichTextBox"></Style>
-    </Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:TextEditorViewModel}">
+            <views:TextEditorUserControl/>
+        </DataTemplate>
+    </Window.Resources>    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="6*" />
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <!--Topbar menu -->
         <Menu>
@@ -114,53 +116,8 @@
 
             </ToolBar>
         </ToolBarTray>
-
-        <!--Text editor -->
-        <avalonedit:TextEditor x:Name="textEditor" Grid.Row="2" ShowLineNumbers="True"/>
         
-        <!--ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <RichTextBox x:Name="textEditor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         Style="{StaticResource NotMaterialDesignStyle}" />
-        </ScrollViewer-->
-        
-        <DataGrid
-            Grid.Row="3"
-            AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="False"
-            CanUserResizeColumns="False"
-            CanUserResizeRows="False"
-            CanUserSortColumns="False"
-            HeadersVisibility="All"
-            ItemsSource="{Binding CompilationErrors}">
-            <DataGrid.Columns>
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Index}"
-                    Header="{StaticResource IndexHeader}">
-                </materialDesign:DataGridTextColumn>
-
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding FilePath}"
-                    Header="{StaticResource FilePathHeader}"
-                    Width="5*" />
-
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Line}"
-                    Header="{StaticResource LineHeader}">
-                </materialDesign:DataGridTextColumn>
-
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Column}"
-                    Header="{StaticResource ColumnHeader}">
-                </materialDesign:DataGridTextColumn>
-
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Message}"
-                    Header="{StaticResource MessageHeader}"
-                    Width="4*">
-                </materialDesign:DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!--File tabs -->
+        <ContentControl Grid.Row="2" Content="{Binding SelectedTextEditorViewModel}"/>
     </Grid>
 </Window>
