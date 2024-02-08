@@ -16,7 +16,7 @@
             <views:TextEditorUserControl />
         </DataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid AllowDrop="True" DragEnter="Grid_OnDragEnter" DragOver="Grid_OnDragOver" DragLeave="Grid_OnDragLeave" Drop="Grid_OnDrop">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

@@ -124,20 +124,24 @@ public class CompilerViewModel : ViewModelBase
     private void OpenExecute(object param)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.ShowDialog(); 
+        openFileDialog.ShowDialog();
         if (openFileDialog.CheckFileExists)
         {
             string filePath = openFileDialog.FileName;
-            FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
-            TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
-                fileInfo.FileExtension, fileInfo.FileContents);
-            _textEditorsViewModels.Add(vm);
-            _selectedTextEditor = vm;
+            OpenFile(filePath);
         }
     }
 
     private void SaveAsExecute(object param)
     {
-        
+    }
+
+    public void OpenFile(string filePath)
+    {
+        FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
+        TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
+            fileInfo.FileExtension, fileInfo.FileContents);
+        _textEditorsViewModels.Add(vm);
+        _selectedTextEditor = vm;
     }
 }

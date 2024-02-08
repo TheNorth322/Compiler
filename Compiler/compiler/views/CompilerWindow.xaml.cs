@@ -23,6 +23,7 @@ namespace Compiler
     /// </summary>
     public partial class CompilerWindow : Window
     {
+        private CompilerViewModel _vm;    
         public CompilerWindow()
         {
             InitializeComponent();
@@ -30,13 +31,45 @@ namespace Compiler
 
         public CompilerWindow(CompilerViewModel compilerViewModel) : this()
         {
-            this.DataContext = compilerViewModel;
-            compilerViewModel.ExitButtonClicked += OnExitButtonClicked;
+            _vm = compilerViewModel;
+            this.DataContext = _vm;
+            _vm.ExitButtonClicked += OnExitButtonClicked;
         }
 
         private void OnExitButtonClicked()
         {
             Application.Current.Shutdown();
+        }
+
+        private void Grid_OnDragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Copy;
+            else
+                e.Effects = DragDropEffects.None;
+        }
+
+        private void Grid_OnDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Copy;
+            else
+                e.Effects = DragDropEffects.None;
+        }
+
+        private void Grid_OnDragLeave(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
+        }
+
+        private void Grid_OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string file = files[0]; 
+                _vm.OpenFile(file); 
+            } 
         }
     }
 }

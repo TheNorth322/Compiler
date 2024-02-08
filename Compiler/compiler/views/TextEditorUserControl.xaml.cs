@@ -1,11 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Compiler.compiler.viewModels;
 
 namespace Compiler.compiler.views;
 
 public partial class TextEditorUserControl : UserControl
 {
+    private const double FONT_MAX_SIZE = 60d;
+    private const double FONT_MIN_SIZE = 5d;
+
     public TextEditorUserControl()
     {
         InitializeComponent();
@@ -55,5 +60,36 @@ public partial class TextEditorUserControl : UserControl
     private void OnSelectAllButtonClicked()
     {
         textEditor.SelectAll();
+    }
+
+    private void TextEditor_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        bool ctrl = Keyboard.Modifiers == ModifierKeys.Control;
+        if (ctrl)
+        {
+            this.UpdateFontSize(e.Delta > 0);
+            e.Handled = true;
+        }
+    }
+
+    private void UpdateFontSize(bool increase)
+    {
+        double currentSize = textEditor.FontSize;
+        if (increase)
+        {
+            if (currentSize < FONT_MAX_SIZE)
+            {
+                double newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
+                textEditor.FontSize = newSize;
+            }
+        }
+        else
+        {
+            if (currentSize > FONT_MIN_SIZE)
+            {
+                double newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+                textEditor.FontSize = newSize;
+            }
+        }
     }
 }

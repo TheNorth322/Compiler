@@ -17,14 +17,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="6*" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
         <!--Text editor -->
         <avalonedit:TextEditor SyntaxHighlighting="{Binding SyntaxHighlightingCode}" x:Name="textEditor" Grid.Row="0"
-                               ShowLineNumbers="True" Document="{Binding TextDocument}"/>
-
+                               ShowLineNumbers="True" Document="{Binding TextDocument}" PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"/>
+        <GridSplitter Grid.Row="1" ShowsPreview="False" HorizontalAlignment="Stretch" Height="3" VerticalAlignment="Center"/>
         <DataGrid
-            Grid.Row="1"
+            Grid.Row="2"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
