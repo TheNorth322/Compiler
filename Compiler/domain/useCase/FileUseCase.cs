@@ -22,9 +22,9 @@ public class FileUseCase
         return _fileRepository.OpenFile(filePath);
     }
 
-    public void SaveFile()
-    {
-        
+    public void SaveFile(FileInfo fileInfo)
+    { 
+        _fileRepository.SaveFile(fileInfo);
     }
 
     public void SaveFileAs()

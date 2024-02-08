@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,9 +12,15 @@ public partial class TextEditorUserControl : UserControl
 {
     private const double FONT_MAX_SIZE = 60d;
     private const double FONT_MIN_SIZE = 5d;
+    private TextEditorViewModel _vm;
+    private ResourceDictionary local;
 
     public TextEditorUserControl()
     {
+        /*local = new ResourceDictionary();
+        local.Source = new Uri($"/locals/{Thread.CurrentThread.CurrentCulture.Name}.xaml", UriKind.RelativeOrAbsolute);
+
+        Application.Current.Resources.MergedDictionaries.Add(local);*/
         InitializeComponent();
     }
 
@@ -25,6 +33,28 @@ public partial class TextEditorUserControl : UserControl
         ((this.DataContext as TextEditorViewModel)!).PutButtonClicked += OnPasteButtonClicked;
         ((this.DataContext as TextEditorViewModel)!).CancelButtonClicked += OnCancelButtonClicked;
         ((this.DataContext as TextEditorViewModel)!).RepeatButtonClicked += OnRepeatButtonClicked;
+        ((this.DataContext as TextEditorViewModel)!).ChangeLanguageEvent += OnChangeLanguageEvent;
+    }
+
+    private void OnChangeLanguageEvent(object? sender, string cultureCode)
+    {
+        try
+        {
+            /*Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
+            
+            Application.Current.Resources.MergedDictionaries.Remove(local);
+            local = new ResourceDictionary();
+            local.Source = new Uri($"/locals/{cultureCode}.xaml", UriKind.RelativeOrAbsolute);
+
+            Application.Current.Resources.MergedDictionaries.Add(local);
+
+            InitializeComponent();*/
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка при изменении локализации: {ex.Message}");
+        }
     }
 
     private void OnCancelButtonClicked()
@@ -91,5 +121,13 @@ public partial class TextEditorUserControl : UserControl
                 textEditor.FontSize = newSize;
             }
         }
+    }
+
+    private void TextEditor_OnTextChanged(object? sender, EventArgs e)
+    {
+        if (!this.IsLoaded) return;
+        ((this.DataContext as TextEditorViewModel)!).FileContents = textEditor.Text;
+        if (((this.DataContext as TextEditorViewModel)!).Saved)
+            ((this.DataContext as TextEditorViewModel)!).FileUnsaved();
     }
 }

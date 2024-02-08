@@ -13,17 +13,22 @@
     <UserControl.Resources>
         <Style x:Key="NotMaterialDesignStyle" TargetType="RichTextBox"></Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="6*" />
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
         <!--Text editor -->
-        <avalonedit:TextEditor SyntaxHighlighting="{Binding SyntaxHighlightingCode}" x:Name="textEditor" Grid.Row="0"
-                               ShowLineNumbers="True" Document="{Binding TextDocument}" PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"/>
-        <GridSplitter Grid.Row="1" ShowsPreview="False" HorizontalAlignment="Stretch" Height="3" VerticalAlignment="Center"/>
+        <avalonedit:TextEditor SyntaxHighlighting="{Binding SyntaxHighlightingCode, Mode=TwoWay}" x:Name="textEditor" Grid.Row="0"
+                               ShowLineNumbers="True" 
+                               Document="{Binding TextDocument}"
+                               PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"
+                               TextChanged="TextEditor_OnTextChanged" />
+
+        <GridSplitter Grid.Row="1" ShowsPreview="False" HorizontalAlignment="Stretch" Height="3"
+                      VerticalAlignment="Center" />
         <DataGrid
             Grid.Row="2"
             AutoGenerateColumns="False"
@@ -38,27 +43,27 @@
             <DataGrid.Columns>
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding Index}"
-                    Header="{StaticResource IndexHeader}">
+                    Header="{DynamicResource IndexHeader}">
                 </materialDesign:DataGridTextColumn>
 
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding FilePath}"
-                    Header="{StaticResource FilePathHeader}"
+                    Header="{DynamicResource FilePathHeader}"
                     Width="5*" />
 
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding Line}"
-                    Header="{StaticResource LineHeader}">
+                    Header="{DynamicResource LineHeader}">
                 </materialDesign:DataGridTextColumn>
 
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding Column}"
-                    Header="{StaticResource ColumnHeader}">
+                    Header="{DynamicResource ColumnHeader}">
                 </materialDesign:DataGridTextColumn>
 
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding Message}"
-                    Header="{StaticResource MessageHeader}"
+                    Header="{DynamicResource MessageHeader}"
                     Width="4*">
                 </materialDesign:DataGridTextColumn>
             </DataGrid.Columns>

@@ -16,7 +16,8 @@
             <views:TextEditorUserControl />
         </DataTemplate>
     </Window.Resources>
-    <Grid AllowDrop="True" DragEnter="Grid_OnDragEnter" DragOver="Grid_OnDragOver" DragLeave="Grid_OnDragLeave" Drop="Grid_OnDrop">
+    <Grid AllowDrop="True" DragEnter="Grid_OnDragEnter" DragOver="Grid_OnDragOver" DragLeave="Grid_OnDragLeave"
+          Drop="Grid_OnDrop">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -24,40 +25,40 @@
         </Grid.RowDefinitions>
         <!--Topbar menu -->
         <Menu>
-            <MenuItem Header="{StaticResource FileHeader}">
-                <MenuItem Command="{Binding}" Header="{StaticResource CreateHeader}" />
-                <MenuItem Command="{Binding OpenCommand}" Header="{StaticResource OpenHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource SaveHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource SaveAsHeader}" />
-                <MenuItem Command="{Binding ExitCommand}" Header="{StaticResource ExitHeader}" />
+            <MenuItem Header="{DynamicResource FileHeader}">
+                <MenuItem Command="{Binding CreateCommand}" Header="{DynamicResource CreateHeader}" />
+                <MenuItem Command="{Binding OpenCommand}" Header="{DynamicResource OpenHeader}" />
+                <MenuItem Command="{Binding SaveCommand}" Header="{DynamicResource SaveHeader}" />
+                <MenuItem Command="{Binding SaveAsCommand}" Header="{DynamicResource SaveAsHeader}" />
+                <MenuItem Command="{Binding ExitCommand}" Header="{DynamicResource ExitHeader}" />
             </MenuItem>
 
-            <MenuItem Header="{StaticResource EditHeader}">
-                <MenuItem Command="{Binding CancelCommand}" Header="{StaticResource CancelHeader}" />
-                <MenuItem Command="{Binding RepeatCommand}" Header="{StaticResource RepeatHeader}" />
-                <MenuItem Command="{Binding CutCommand}" Header="{StaticResource CutHeader}" />
-                <MenuItem Command="{Binding CopyCommand}" Header="{StaticResource CopyHeader}" />
-                <MenuItem Command="{Binding PutCommand}" Header="{StaticResource PutHeader}" />
-                <MenuItem Command="{Binding DeleteCommand}" Header="{StaticResource DeleteHeader}" />
-                <MenuItem Command="{Binding SelectAllCommand}" Header="{StaticResource SelectAllHeader}" />
+            <MenuItem Header="{DynamicResource EditHeader}">
+                <MenuItem Command="{Binding CancelCommand}" Header="{DynamicResource CancelHeader}" />
+                <MenuItem Command="{Binding RepeatCommand}" Header="{DynamicResource RepeatHeader}" />
+                <MenuItem Command="{Binding CutCommand}" Header="{DynamicResource CutHeader}" />
+                <MenuItem Command="{Binding CopyCommand}" Header="{DynamicResource CopyHeader}" />
+                <MenuItem Command="{Binding PutCommand}" Header="{DynamicResource PutHeader}" />
+                <MenuItem Command="{Binding DeleteCommand}" Header="{DynamicResource DeleteHeader}" />
+                <MenuItem Command="{Binding SelectAllCommand}" Header="{DynamicResource SelectAllHeader}" />
             </MenuItem>
 
-            <MenuItem Header="{StaticResource TextHeader}">
-                <MenuItem Command="{Binding}" Header="{StaticResource TaskHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource GrammarHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource GrammarClassificationHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource AnalyzationMethodHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource DiagnosisHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource ExampleHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource BooksHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource SourceCodeHeader}" />
+            <MenuItem Header="{DynamicResource TextHeader}">
+                <MenuItem Command="{Binding}" Header="{DynamicResource TaskHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource GrammarHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource GrammarClassificationHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource AnalyzationMethodHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource DiagnosisHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource ExampleHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource BooksHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource SourceCodeHeader}" />
             </MenuItem>
 
-            <MenuItem Command="{Binding}" Header="{StaticResource StartHeader}" />
+            <MenuItem Command="{Binding }" Header="{DynamicResource StartHeader}" />
 
-            <MenuItem Header="{StaticResource ReferenceHeader}">
-                <MenuItem Command="{Binding}" Header="{StaticResource CallReferenceHeader}" />
-                <MenuItem Command="{Binding}" Header="{StaticResource ProgrammDescriptionHeader}" />
+            <MenuItem Header="{DynamicResource ReferenceHeader}">
+                <MenuItem Command="{Binding}" Header="{DynamicResource CallReferenceHeader}" />
+                <MenuItem Command="{Binding}" Header="{DynamicResource ProgrammDescriptionHeader}" />
             </MenuItem>
         </Menu>
 
@@ -68,52 +69,55 @@
                 Style="{StaticResource MaterialDesignToolBar}">
 
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding CreateCommand}"
                     Content="{materialDesign:PackIcon Kind=FileDocumentAdd}"
-                    ToolTip="{StaticResource CreateHeader}" />
+                    ToolTip="{DynamicResource CreateHeader}" />
                 <Button
                     Command="{Binding OpenCommand}"
                     Content="{materialDesign:PackIcon Kind=FileSearch}"
-                    ToolTip="{StaticResource OpenHeader}" />
+                    ToolTip="{DynamicResource OpenHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding SaveCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentSave}"
-                    ToolTip="{StaticResource SaveHeader}" />
+                    ToolTip="{DynamicResource SaveHeader}" />
                 <Button
                     Command="{Binding CancelCommand}"
                     Content="{materialDesign:PackIcon Kind=ArrowLeft}"
-                    ToolTip="{StaticResource CancelHeader}" />
+                    ToolTip="{DynamicResource CancelHeader}" />
 
                 <Button
                     Command="{Binding RepeatCommand}"
                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
-                    ToolTip="{StaticResource RepeatHeader}" />
+                    ToolTip="{DynamicResource RepeatHeader}" />
                 <Button
                     Command="{Binding CopyCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentCopy}"
-                    ToolTip="{StaticResource CopyHeader}" />
+                    ToolTip="{DynamicResource CopyHeader}" />
                 <Button
                     Command="{Binding CutCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentCut}"
-                    ToolTip="{StaticResource CutHeader}" />
+                    ToolTip="{DynamicResource CutHeader}" />
                 <Button
                     Command="{Binding PutCommand}"
                     Content="{materialDesign:PackIcon Kind=Import}"
-                    ToolTip="{StaticResource PutHeader}" />
+                    ToolTip="{DynamicResource PutHeader}" />
                 <Button
                     Command="{Binding}"
                     Content="{materialDesign:PackIcon Kind=Play}"
-                    ToolTip="{StaticResource StartHeader}" />
+                    ToolTip="{DynamicResource StartHeader}" />
                 <Button
                     Command="{Binding}"
                     Content="{materialDesign:PackIcon Kind=HelpCircle}"
-                    ToolTip="{StaticResource CallReferenceHeader}" />
+                    ToolTip="{DynamicResource CallReferenceHeader}" />
 
                 <Button
                     Command="{Binding}"
                     Content="{materialDesign:PackIcon Kind=InformationVariantCircle}"
-                    ToolTip="{StaticResource ProgrammDescriptionHeader}" />
-
+                    ToolTip="{DynamicResource ProgrammDescriptionHeader}" />
+                <Button
+                    Command="{Binding ChangeLanguageCommand}"
+                    Content="{materialDesign:PackIcon Kind=Translate}"
+                    ToolTip="{DynamicResource ChangeLanguageHeader}" />
             </ToolBar>
         </ToolBarTray>
 
@@ -121,7 +125,7 @@
         <TabControl Grid.Row="2"
                     HorizontalContentAlignment="Left"
                     ItemsSource="{Binding TextEditorViewModels}"
-                    SelectedItem="{Binding SelectedTextEditorViewModel}">
+                    SelectedItem="{Binding SelectedTextEditorViewModel, Mode=TwoWay}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel

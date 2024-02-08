@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <system:String x:Key="FileHeader">File</system:String>
+    <system:String x:Key="EditHeader">Edit</system:String>
+    <system:String x:Key="TextHeader">Text</system:String>
+    <system:String x:Key="StartHeader">Start</system:String>
+    <system:String x:Key="ReferenceHeader">Reference</system:String>
+
+    <system:String x:Key="CreateHeader">Create</system:String>
+    <system:String x:Key="OpenHeader">Open</system:String>
+    <system:String x:Key="SaveHeader">Save</system:String>
+    <system:String x:Key="SaveAsHeader">Save as</system:String>
+    <system:String x:Key="ExitHeader">Exit</system:String>
+
+    <system:String x:Key="CancelHeader">Cancel</system:String>
+    <system:String x:Key="RepeatHeader">Repeat</system:String>
+    <system:String x:Key="CutHeader">Cut</system:String>
+    <system:String x:Key="CopyHeader">Copy</system:String>
+    <system:String x:Key="PutHeader">Paste</system:String>
+    <system:String x:Key="DeleteHeader">Delete</system:String>
+    <system:String x:Key="SelectAllHeader">Select all</system:String>
+
+    <system:String x:Key="TaskHeader">Task</system:String>
+    <system:String x:Key="GrammarHeader">Grammar</system:String>
+    <system:String x:Key="GrammarClassificationHeader">Grammar classification</system:String>
+    <system:String x:Key="AnalyzationMethodHeader">Analyzation method</system:String>
+    <system:String x:Key="DiagnosisHeader">Diagnostics</system:String>
+    <system:String x:Key="ExampleHeader">Example</system:String>
+    <system:String x:Key="BooksHeader">Books</system:String>
+    <system:String x:Key="SourceCodeHeader">Source code</system:String>
+
+    <system:String x:Key="CallReferenceHeader">Call reference</system:String>
+    <system:String x:Key="ProgrammDescriptionHeader">Program description</system:String>
+
+    <system:String x:Key="IndexHeader">Index</system:String>
+    <system:String x:Key="FilePathHeader">Path</system:String>
+    <system:String x:Key="LineHeader">Line</system:String>
+    <system:String x:Key="ColumnHeader">Column</system:String>
+    <system:String x:Key="MessageHeader">Message</system:String>
+    <system:String x:Key="ChangeLanguageHeader">Сменить язык</system:String>
+</ResourceDictionary>

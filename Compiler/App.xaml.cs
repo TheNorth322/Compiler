@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Compiler.compiler.viewModels;
@@ -22,7 +24,11 @@ namespace Compiler
                 new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService()),
                 new ReferenceUseCase(new ReferenceService()));
             this.MainWindow = new CompilerWindow(compilerViewModel);
+            
+            
+            
             MainWindow.Show();
+
             base.OnStartup(e);
         }
     }

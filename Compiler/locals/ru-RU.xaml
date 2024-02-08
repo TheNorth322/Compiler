@@ -38,5 +38,5 @@
     <system:String x:Key="LineHeader">Строка</system:String>
     <system:String x:Key="ColumnHeader">Колонка</system:String>
     <system:String x:Key="MessageHeader">Сообщение</system:String>
-    
+    <system:String x:Key="ChangeLanguageHeader">Change language</system:String>
 </ResourceDictionary>

@@ -10,11 +10,14 @@ public class TextEditorViewModel : ViewModelBase
 {
     private string _syntaxHighlightingCode;
     private ObservableCollection<CompilationErrorViewModel> _compilationErrors;
-
+    
+    private string _originalFileName;
     private string _fileName;
     private string _filePath;
     private string _fileContents;
     private string _fileExtension;
+    private bool _saved;
+    
     private TextDocument _textDocument;
     public Action SelectAllButtonClicked { get; set; }
     public Action CutButtonClicked { get; set; }
@@ -35,6 +38,8 @@ public class TextEditorViewModel : ViewModelBase
         _filePath = filePath;
         _fileContents = fileContents;
         _fileExtension = fileExtension;
+        _saved = true;
+        _originalFileName = fileName;
         _textDocument = new TextDocument(fileContents); 
         GetSyntaxHighlightingCode();
     }
@@ -79,6 +84,24 @@ public class TextEditorViewModel : ViewModelBase
         }
     }
 
+    public string FilePath
+    {
+        get => _filePath;
+        set
+        {
+            _filePath = value;
+            OnPropertyChanged(nameof(FilePath));
+        }
+    }
+    public bool Saved
+    {
+        get => _saved;
+        set
+        {
+            _saved = value;
+            OnPropertyChanged(nameof(Saved));
+        }
+    }
     public TextDocument TextDocument
     {
         get => _textDocument;
@@ -88,6 +111,9 @@ public class TextEditorViewModel : ViewModelBase
             OnPropertyChanged(nameof(TextDocument));
         }
     }
+
+    public EventHandler<string> ChangeLanguageEvent { get; set; }
+
     public void UpdateCompilationErrors(ObservableCollection<CompilationErrorViewModel> compilationErrorViewModels)
     {
         _compilationErrors = compilationErrorViewModels;
@@ -110,7 +136,7 @@ public class TextEditorViewModel : ViewModelBase
                 SyntaxHighlightingCode = "CSS";
                 break;
             case ".cpp":
-                SyntaxHighlightingCode = "C+";
+                SyntaxHighlightingCode = "C++";
                 break;
             case ".jar":
                 SyntaxHighlightingCode = "Java";
@@ -119,5 +145,17 @@ public class TextEditorViewModel : ViewModelBase
                 SyntaxHighlightingCode = "";
                 break;
         }
+    }
+
+    public void FileSaved()
+    {
+        Saved = true;
+        Header = _originalFileName;
+    }
+
+    public void FileUnsaved()
+    {
+        Saved = false;
+        Header = "* " + _originalFileName;
     }
 }

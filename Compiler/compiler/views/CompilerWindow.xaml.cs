@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,9 +25,18 @@ namespace Compiler
     /// </summary>
     public partial class CompilerWindow : Window
     {
-        private CompilerViewModel _vm;    
+        private CompilerViewModel _vm;
+        private ResourceDictionary local;
+
         public CompilerWindow()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
+            local = new ResourceDictionary();
+            local.Source = new Uri($"/locals/ru-RU.xaml", UriKind.RelativeOrAbsolute);
+
+            Application.Current.Resources.MergedDictionaries.Add(local);
             InitializeComponent();
         }
 
@@ -34,6 +45,42 @@ namespace Compiler
             _vm = compilerViewModel;
             this.DataContext = _vm;
             _vm.ExitButtonClicked += OnExitButtonClicked;
+            _vm.ShowWantToSaveMessageBox += OnShowWantToSaveMessageBox;
+            _vm.ChangeLanguageAction += OnChangeLanguageEvent;
+        }
+
+        private void OnChangeLanguageEvent(object? sender, string cultureCode)
+        {
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
+
+                Application.Current.Resources.MergedDictionaries.Remove(local);
+                local = new ResourceDictionary();
+                local.Source = new Uri($"/locals/{cultureCode}.xaml", UriKind.RelativeOrAbsolute);
+
+                Application.Current.Resources.MergedDictionaries.Add(local);
+
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при изменении локализации: {ex.Message}");
+            }
+        }
+
+        private void OnShowWantToSaveMessageBox()
+        {
+            MessageBoxResult result =
+                MessageBox.Show("Хотите сохранить изменения?", "Сохранение", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+            {
+                if (_vm.SelectedTextEditorViewModel.FilePath == "")
+                    _vm.SaveAsExecute(this);
+                else
+                    _vm.SaveExecute(this);
+            }
         }
 
         private void OnExitButtonClicked()
@@ -67,9 +114,9 @@ namespace Compiler
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                string file = files[0]; 
-                _vm.OpenFile(file); 
-            } 
+                string file = files[0];
+                _vm.OpenFile(file);
+            }
         }
     }
 }
