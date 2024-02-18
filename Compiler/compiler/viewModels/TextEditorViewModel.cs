@@ -64,6 +64,7 @@ public class TextEditorViewModel : ViewModelBase
         set
         {
             _syntaxHighlightingCode = value;
+            ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinition(value); 
             OnPropertyChanged(nameof(SyntaxHighlightingCode));
         }
     }

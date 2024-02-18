@@ -31,6 +31,7 @@
                       VerticalAlignment="Center" />
         <DataGrid
             Grid.Row="2"
+            x:Name="DataGrid"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
@@ -38,7 +39,9 @@
             CanUserResizeColumns="False"
             CanUserResizeRows="False"
             CanUserSortColumns="False"
+            PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
             ItemsSource="{Binding CompilationErrors}">
+            
             <DataGrid.Columns>
                 <materialDesign:DataGridTextColumn
                     Binding="{Binding Index}"

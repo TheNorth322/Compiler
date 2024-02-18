@@ -130,4 +130,35 @@ public partial class TextEditorUserControl : UserControl
         if (((this.DataContext as TextEditorViewModel)!).Saved)
             ((this.DataContext as TextEditorViewModel)!).FileUnsaved();
     }
+
+    private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        bool ctrl = Keyboard.Modifiers == ModifierKeys.Control;
+        if (ctrl)
+        {
+            this.UpdateDataGridFontSize(e.Delta > 0);
+            e.Handled = true;
+        }
+    }
+
+    private void UpdateDataGridFontSize(bool increase)
+    {
+        double currentSize = DataGrid.FontSize;
+        if (increase)
+        {
+            if (currentSize < FONT_MAX_SIZE)
+            {
+                double newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
+                DataGrid.FontSize = newSize;
+            }
+        }
+        else
+        {
+            if (currentSize > FONT_MIN_SIZE)
+            {
+                double newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+                DataGrid.FontSize = newSize;
+            }
+        }
+    }
 }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Compiler.domain.useCases;
 using Compiler.utils;
 using FileInfo = Compiler.domain.entity.FileInfo;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Compiler.compiler.viewModels;
 
@@ -37,7 +39,7 @@ public class CompilerViewModel : ViewModelBase
     public ICommand ChangeLanguageCommand { get; }
     public ICommand SaveCommand { get; }
     public ICommand CallProgramDescriptionCommand { get; }
-    
+
     public Action ExitButtonClicked { get; set; }
     public EventHandler<string> ChangeLanguageAction { get; set; }
     public Action ShowWantToSaveMessageBox { get; set; }
@@ -59,8 +61,8 @@ public class CompilerViewModel : ViewModelBase
         SaveCommand = new RelayCommand<object>(SaveExecute);
         ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguageExecute);
         CallReferenceCommand = new RelayCommand<object>(CallReferenceExecute);
-        CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription); 
-        
+        CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription);
+
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
         _compilerUseCase = compilerUseCase;
@@ -142,60 +144,88 @@ public class CompilerViewModel : ViewModelBase
 
     private void CreateExecute(object param)
     {
-        if (SelectedTextEditorViewModel != null && !SelectedTextEditorViewModel.Saved)
+        try
         {
-            ShowWantToSaveMessageBox?.Invoke();
-        }
+            if (SelectedTextEditorViewModel != null && !SelectedTextEditorViewModel.Saved)
+            {
+                ShowWantToSaveMessageBox?.Invoke();
+            }
 
-        FileInfo fileInfo = new FileInfo("Новый документ.txt", "", ".txt", "");
-        TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
-            fileInfo.FileExtension, fileInfo.FileContents);
-        _textEditorsViewModels.Add(vm);
-        _selectedTextEditor = vm;
+            FileInfo fileInfo = new FileInfo("Новый документ.txt", "", ".txt", "");
+            TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
+                fileInfo.FileExtension, fileInfo.FileContents);
+            _textEditorsViewModels.Add(vm);
+            _selectedTextEditor = vm;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void OpenExecute(object param)
     {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-        DialogResult value = openFileDialog.ShowDialog();
-
-        switch (value)
+        try
         {
-            case DialogResult.Abort:
-            case DialogResult.Cancel:
-            case DialogResult.No:
-                return;
-            default:
-                break;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            DialogResult value = openFileDialog.ShowDialog();
+
+            switch (value)
+            {
+                case DialogResult.Abort:
+                case DialogResult.Cancel:
+                case DialogResult.No:
+                    return;
+                default:
+                    break;
+            }
+
+            if (openFileDialog.CheckFileExists)
+            {
+                string filePath = openFileDialog.FileName;
+                OpenFile(filePath);
+            }
         }
-
-        if (openFileDialog.CheckFileExists)
+        catch (Exception ex)
         {
-            string filePath = openFileDialog.FileName;
-            OpenFile(filePath);
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     public void SaveExecute(object param)
     {
-        SaveFile(_selectedTextEditor.FilePath);
-        _selectedTextEditor.FileSaved();
+        try
+        {
+            SaveFile(_selectedTextEditor.FilePath);
+            _selectedTextEditor.FileSaved();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public void SaveAsExecute(object param)
     {
-        SaveFileDialog openFileDialog = new SaveFileDialog();
-        DialogResult result = openFileDialog.ShowDialog();
-        switch (result)
+        try
         {
-            case DialogResult.Abort:
-            case DialogResult.Cancel:
-            case DialogResult.No:
-                return;
-            default:
-                SaveFile(openFileDialog.FileName);
-                _selectedTextEditor.FileSaved();
-                return;
+            SaveFileDialog openFileDialog = new SaveFileDialog();
+            DialogResult result = openFileDialog.ShowDialog();
+            switch (result)
+            {
+                case DialogResult.Abort:
+                case DialogResult.Cancel:
+                case DialogResult.No:
+                    return;
+                default:
+                    SaveFile(openFileDialog.FileName);
+                    _selectedTextEditor.FileSaved();
+                    return;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -210,41 +240,69 @@ public class CompilerViewModel : ViewModelBase
 
             _fileUseCase.SaveFile(fileInfo);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            return;
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     public void OpenFile(string filePath)
     {
-        FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
-        TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
-            fileInfo.FileExtension, fileInfo.FileContents);
-        _textEditorsViewModels.Add(vm);
-        _selectedTextEditor = vm;
+        try
+        {
+            FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
+            TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
+                fileInfo.FileExtension, fileInfo.FileContents);
+            _textEditorsViewModels.Add(vm);
+            _selectedTextEditor = vm;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public void ChangeLanguageExecute(object param)
     {
-        _currentLanguage = (_currentLanguage == "ru-RU") ? "en-US" : "ru-RU";
-        foreach (TextEditorViewModel vm in TextEditorViewModels)
+        try
         {
-            vm.ChangeLanguageEvent?.Invoke(this, _currentLanguage);
-        }
+            _currentLanguage = (_currentLanguage == "ru-RU") ? "en-US" : "ru-RU";
+            foreach (TextEditorViewModel vm in TextEditorViewModels)
+            {
+                vm.ChangeLanguageEvent?.Invoke(this, _currentLanguage);
+            }
 
-        ChangeLanguageAction?.Invoke(this, _currentLanguage);
+            ChangeLanguageAction?.Invoke(this, _currentLanguage);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public void CallReferenceExecute(object param)
     {
-        string reference = "reference.html";
-        Process.Start(new ProcessStartInfo(reference) { UseShellExecute = true });
+        try
+        {
+            string reference = "reference.html";
+            Process.Start(new ProcessStartInfo(reference) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public void CallProgramDescription(object param)
     {
-        string path = "description.html";
-        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        try
+        {
+            string path = "description.html";
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }
