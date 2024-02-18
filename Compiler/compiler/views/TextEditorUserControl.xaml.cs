@@ -40,7 +40,7 @@ public partial class TextEditorUserControl : UserControl
     {
         try
         {
-            /*Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
             
             Application.Current.Resources.MergedDictionaries.Remove(local);
@@ -49,7 +49,7 @@ public partial class TextEditorUserControl : UserControl
 
             Application.Current.Resources.MergedDictionaries.Add(local);
 
-            InitializeComponent();*/
+            InvalidateVisual();
         }
         catch (Exception ex)
         {

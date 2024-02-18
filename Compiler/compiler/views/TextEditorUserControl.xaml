@@ -21,7 +21,7 @@
             <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
         <!--Text editor -->
-        <avalonedit:TextEditor SyntaxHighlighting="{Binding SyntaxHighlightingCode, Mode=TwoWay}" x:Name="textEditor" Grid.Row="0"
+        <avalonedit:TextEditor SyntaxHighlighting="C#" x:Name="textEditor" Grid.Row="0"
                                ShowLineNumbers="True" 
                                Document="{Binding TextDocument}"
                                PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"
@@ -38,7 +38,6 @@
             CanUserResizeColumns="False"
             CanUserResizeRows="False"
             CanUserSortColumns="False"
-            HeadersVisibility="All"
             ItemsSource="{Binding CompilationErrors}">
             <DataGrid.Columns>
                 <materialDesign:DataGridTextColumn

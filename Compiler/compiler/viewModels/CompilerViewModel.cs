@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -29,11 +30,14 @@ public class CompilerViewModel : ViewModelBase
     public ICommand CancelCommand { get; }
     public ICommand RepeatCommand { get; }
 
+    public ICommand CallReferenceCommand { get; }
     public ICommand CreateCommand { get; }
     public ICommand OpenCommand { get; }
     public ICommand SaveAsCommand { get; }
     public ICommand ChangeLanguageCommand { get; }
     public ICommand SaveCommand { get; }
+    public ICommand CallProgramDescriptionCommand { get; }
+    
     public Action ExitButtonClicked { get; set; }
     public EventHandler<string> ChangeLanguageAction { get; set; }
     public Action ShowWantToSaveMessageBox { get; set; }
@@ -54,13 +58,16 @@ public class CompilerViewModel : ViewModelBase
         SaveAsCommand = new RelayCommand<object>(SaveAsExecute);
         SaveCommand = new RelayCommand<object>(SaveExecute);
         ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguageExecute);
-
+        CallReferenceCommand = new RelayCommand<object>(CallReferenceExecute);
+        CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription); 
+        
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
         _compilerUseCase = compilerUseCase;
         _referenceUseCase = referenceUseCase;
         _currentLanguage = "ru-RU";
         _textEditorsViewModels = new ObservableCollection<TextEditorViewModel>();
+        CreateExecute(this);
     }
 
 
@@ -135,6 +142,11 @@ public class CompilerViewModel : ViewModelBase
 
     private void CreateExecute(object param)
     {
+        if (SelectedTextEditorViewModel != null && !SelectedTextEditorViewModel.Saved)
+        {
+            ShowWantToSaveMessageBox?.Invoke();
+        }
+
         FileInfo fileInfo = new FileInfo("Новый документ.txt", "", ".txt", "");
         TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
             fileInfo.FileExtension, fileInfo.FileContents);
@@ -145,7 +157,18 @@ public class CompilerViewModel : ViewModelBase
     private void OpenExecute(object param)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.ShowDialog();
+        DialogResult value = openFileDialog.ShowDialog();
+
+        switch (value)
+        {
+            case DialogResult.Abort:
+            case DialogResult.Cancel:
+            case DialogResult.No:
+                return;
+            default:
+                break;
+        }
+
         if (openFileDialog.CheckFileExists)
         {
             string filePath = openFileDialog.FileName;
@@ -162,9 +185,18 @@ public class CompilerViewModel : ViewModelBase
     public void SaveAsExecute(object param)
     {
         SaveFileDialog openFileDialog = new SaveFileDialog();
-        openFileDialog.ShowDialog();
-        SaveFile(openFileDialog.FileName);
-        _selectedTextEditor.FileSaved();
+        DialogResult result = openFileDialog.ShowDialog();
+        switch (result)
+        {
+            case DialogResult.Abort:
+            case DialogResult.Cancel:
+            case DialogResult.No:
+                return;
+            default:
+                SaveFile(openFileDialog.FileName);
+                _selectedTextEditor.FileSaved();
+                return;
+        }
     }
 
     private void SaveFile(string filePath)
@@ -200,6 +232,19 @@ public class CompilerViewModel : ViewModelBase
         {
             vm.ChangeLanguageEvent?.Invoke(this, _currentLanguage);
         }
+
         ChangeLanguageAction?.Invoke(this, _currentLanguage);
+    }
+
+    public void CallReferenceExecute(object param)
+    {
+        string reference = "reference.html";
+        Process.Start(new ProcessStartInfo(reference) { UseShellExecute = true });
+    }
+
+    public void CallProgramDescription(object param)
+    {
+        string path = "description.html";
+        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
     }
 }

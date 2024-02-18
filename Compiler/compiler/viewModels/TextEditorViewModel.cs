@@ -40,8 +40,12 @@ public class TextEditorViewModel : ViewModelBase
         _fileExtension = fileExtension;
         _saved = true;
         _originalFileName = fileName;
-        _textDocument = new TextDocument(fileContents); 
         GetSyntaxHighlightingCode();
+        _compilationErrors.Add(new CompilationErrorViewModel(1,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(2,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(3,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(4,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _textDocument = new TextDocument(fileContents); 
     }
 
     public ObservableCollection<CompilationErrorViewModel> CompilationErrors
