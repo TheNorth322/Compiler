@@ -62,7 +62,7 @@ namespace Compiler
 
                 Application.Current.Resources.MergedDictionaries.Add(local);
 
-                InitializeComponent();
+                InvalidateVisual();
             }
             catch (Exception ex)
             {

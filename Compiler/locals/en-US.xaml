@@ -44,10 +44,24 @@
     <system:String x:Key="EndIndexHeader">End Index</system:String>
     <system:String x:Key="LexemeTypeHeader">Lexeme Type</system:String>
     <system:String x:Key="LexemeHeader">Lexeme</system:String>
-   
-    
+
+
     <system:String x:Key="ErrorsHeader">Errors</system:String>
     <system:String x:Key="AnalyzerHeader">Analyzer</system:String>
-    
+
     <system:String x:Key="LexemeCodeHeader">Lexeme code</system:String>
+    <system:String x:Key="ExceptionMessage">Exception occured: </system:String>
+    <system:String x:Key="ExceptionHeader">Exception</system:String>
+    <system:String x:Key="NewDocumentHeader">New document.txt</system:String>
+
+    <system:String x:Key="KeyWordHeader">Key word</system:String>
+    <system:String x:Key="IdentifierHeader">Identifier</system:String>
+    <system:String x:Key="SeparatorHeader">Separator</system:String>
+    <system:String x:Key="TypeAssignmentOperatorHeader">Type assignment operator</system:String>
+    <system:String x:Key="AssignmentOperatorHeader">Assignment operator</system:String>
+    <system:String x:Key="StringConstHeader">String constant</system:String>
+    <system:String x:Key="UnsignedIntegerHeader">Unsigned integer</system:String>
+    <system:String x:Key="EndOfExpressionHeader">End of expression</system:String>
+    <system:String x:Key="InvalidLexemeHeader">Invalid lexeme</system:String>
+    <system:String x:Key="Error">Error</system:String>
 </ResourceDictionary>

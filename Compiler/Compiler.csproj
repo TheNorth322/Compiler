@@ -26,4 +26,43 @@
       <None Remove="reference.html" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="reference-en-US.html" />
+      <None Remove="reference-ru-RU.html" />
+      <None Remove="description-ru-RU.html" />
+      <None Remove="description-en-US.html" />
+      <Content Update="references\description-en-US.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="references\description-ru-RU.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="references\reference-en-US.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="references\reference-ru-RU.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="example\example.txt" />
+      <Content Include="example\example.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\description-en-US.html" />
+      <Content Include="references\description-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\description-ru-RU.html" />
+      <Content Include="references\description-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\reference-en-US.html" />
+      <Content Include="references\reference-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\reference-ru-RU.html" />
+      <Content Include="references\reference-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

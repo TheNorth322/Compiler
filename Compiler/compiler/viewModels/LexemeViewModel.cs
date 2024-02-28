@@ -91,9 +91,11 @@ public class LexemeViewModel : ViewModelBase
             OnPropertyChanged(nameof(Lexeme));
         }
     }
-
+    
     private string? ConvertLexemeTypeToString(LexemeType lexemeType)
     {
+        LocalizationProvider provider = LocalizationProvider.Instance;
+        
         switch (lexemeType)
         {
                 case LexemeType.Const:
@@ -102,25 +104,25 @@ public class LexemeViewModel : ViewModelBase
                 case LexemeType.Boolean:
                 case LexemeType.True:
                 case LexemeType.False:
-                    return "Ключевое слово";
+                    return provider.GetStringByCode("KeyWordHeader");
                 case LexemeType.Identifier:
-                    return "Идентификатор";
+                    return provider.GetStringByCode("IdentifierHeader");
                 case LexemeType.Separator:
-                    return "Разделитель";
+                    return provider.GetStringByCode("SeparatorHeader");
                 case LexemeType.TypeAssignmentOperator:
-                    return "Оператор присвоение типа"; 
+                    return provider.GetStringByCode("TypeAssignmentOperatorHeader");
                 case LexemeType.AssignmentOperator:
-                    return "Оператор присвоения";
+                    return provider.GetStringByCode("AssignmentOperatorHeader");
                 case LexemeType.StringConstant:
-                    return "Строковая константа";
+                    return provider.GetStringByCode("StringConstHeader");
                 case LexemeType.UnsignedInteger:
-                    return "Целое беззнаковое";
+                    return provider.GetStringByCode("UnsignedIntegerHeader");
                 case LexemeType.EndOfStatement:
-                    return "Конец выражения";   
+                    return provider.GetStringByCode("EndOfExpressionHeader");
                 case LexemeType.Invalid:
-                    return "Неверная лексема";
+                    return provider.GetStringByCode("InvalidLexemeHeader");
                 default:
-                    return "Ошибка";
+                    return provider.GetStringByCode("Error");
         }
     }
 }

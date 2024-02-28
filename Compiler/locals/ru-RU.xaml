@@ -47,7 +47,21 @@
 
     <system:String x:Key="ErrorsHeader">Ошибки</system:String>
     <system:String x:Key="AnalyzerHeader">Анализатор</system:String>
-    
+
     <system:String x:Key="LexemeCodeHeader">Код лексемы</system:String>
-    
+    <system:String x:Key="ExceptionMessage">Произошла ошибка: </system:String>
+    <system:String x:Key="ExceptionHeader">Ошибка</system:String>
+
+    <system:String x:Key="NewDocumentHeader">Новый документ.txt</system:String>
+
+    <system:String x:Key="KeyWordHeader">Ключевое слово</system:String>
+    <system:String x:Key="IdentifierHeader">Идентификатор</system:String>
+    <system:String x:Key="SeparatorHeader">Разделитель</system:String>
+    <system:String x:Key="TypeAssignmentOperatorHeader">Оператор присвоения типа</system:String>
+    <system:String x:Key="AssignmentOperatorHeader">Оператор присвоения</system:String>
+    <system:String x:Key="StringConstHeader">Строковая константа</system:String>
+    <system:String x:Key="UnsignedIntegerHeader">Целое без знаковое</system:String>
+    <system:String x:Key="EndOfExpressionHeader">Конец выражения</system:String>
+    <system:String x:Key="InvalidLexemeHeader">Неверная лексема</system:String>
+    <system:String x:Key="Error">Ошибка</system:String>
 </ResourceDictionary>

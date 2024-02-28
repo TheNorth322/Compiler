@@ -49,10 +49,10 @@ public class TextEditorViewModel : ViewModelBase
         _originalFileName = fileName;
         GetSyntaxHighlightingCode();
         
-        _compilationErrors.Add(new CompilationErrorViewModel(1,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
-        _compilationErrors.Add(new CompilationErrorViewModel(2,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
-        _compilationErrors.Add(new CompilationErrorViewModel(3,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
-        _compilationErrors.Add(new CompilationErrorViewModel(4,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(1,"C:\\Users\\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(2,"C:\\Users\\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(3,"C:\\Users\\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        _compilationErrors.Add(new CompilationErrorViewModel(4,"C:\\Users\\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
         
         _textDocument = new TextDocument(fileContents); 
     }

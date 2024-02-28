@@ -49,7 +49,7 @@
                 <MenuItem Command="{Binding}" Header="{DynamicResource GrammarClassificationHeader}" />
                 <MenuItem Command="{Binding}" Header="{DynamicResource AnalyzationMethodHeader}" />
                 <MenuItem Command="{Binding}" Header="{DynamicResource DiagnosisHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource ExampleHeader}" />
+                <MenuItem Command="{Binding OpenExampleCommand}" Header="{DynamicResource ExampleHeader}" />
                 <MenuItem Command="{Binding}" Header="{DynamicResource BooksHeader}" />
                 <MenuItem Command="{Binding}" Header="{DynamicResource SourceCodeHeader}" />
             </MenuItem>

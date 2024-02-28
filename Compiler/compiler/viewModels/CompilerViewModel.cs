@@ -22,7 +22,8 @@ public class CompilerViewModel : ViewModelBase
     private TextUseCase _textUseCase;
     private CompilerUseCase _compilerUseCase;
     private ReferenceUseCase _referenceUseCase;
-    private string _currentLanguage;
+    private LocalizationProvider _localizationProvider;
+
     public ICommand SelectAllCommand { get; }
     public ICommand ExitCommand { get; }
     public ICommand CutCommand { get; }
@@ -32,6 +33,7 @@ public class CompilerViewModel : ViewModelBase
     public ICommand CancelCommand { get; }
     public ICommand RepeatCommand { get; }
 
+    public ICommand OpenExampleCommand { get; }
     public ICommand CallReferenceCommand { get; }
     public ICommand CreateCommand { get; }
     public ICommand OpenCommand { get; }
@@ -65,13 +67,15 @@ public class CompilerViewModel : ViewModelBase
         CallReferenceCommand = new RelayCommand<object>(CallReferenceExecute);
         CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription);
         StartAnalyzationCommand = new RelayCommand<object>(StartAnalyzationExecute);
+        OpenExampleCommand = new RelayCommand<object>(OpenExampleExecute);
 
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
         _compilerUseCase = compilerUseCase;
         _referenceUseCase = referenceUseCase;
-        _currentLanguage = "ru-RU";
         _textEditorsViewModels = new ObservableCollection<TextEditorViewModel>();
+        _localizationProvider = LocalizationProvider.Instance;
+
         CreateExecute(this);
     }
 
@@ -95,6 +99,7 @@ public class CompilerViewModel : ViewModelBase
             OnPropertyChanged(nameof(TextEditorViewModels));
         }
     }
+
 
     private void CancelExecute(object param)
     {
@@ -154,7 +159,9 @@ public class CompilerViewModel : ViewModelBase
                 ShowWantToSaveMessageBox?.Invoke();
             }
 
-            FileInfo fileInfo = new FileInfo("Новый документ.txt", "", ".txt", "");
+            string header = _localizationProvider.GetStringByCode("NewDocumentHeader");
+
+            FileInfo fileInfo = new FileInfo(header, "", ".txt", "");
             TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
                 fileInfo.FileExtension, fileInfo.FileContents, _compilerUseCase);
             _textEditorsViewModels.Add(vm);
@@ -162,7 +169,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -191,7 +201,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -204,7 +217,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -228,7 +244,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -245,7 +264,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -253,7 +275,7 @@ public class CompilerViewModel : ViewModelBase
     {
         _selectedTextEditor.StartAnalyzation();
     }
-    
+
     public void OpenFile(string filePath)
     {
         try
@@ -266,7 +288,10 @@ public class CompilerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -274,41 +299,67 @@ public class CompilerViewModel : ViewModelBase
     {
         try
         {
-            _currentLanguage = (_currentLanguage == "ru-RU") ? "en-US" : "ru-RU";
+            _localizationProvider.CurrentLocalizationCode =
+                (_localizationProvider.CurrentLocalizationCode == "ru-RU") ? "en-US" : "ru-RU";
             foreach (TextEditorViewModel vm in TextEditorViewModels)
             {
-                vm.ChangeLanguageEvent?.Invoke(this, _currentLanguage);
+                vm.ChangeLanguageEvent?.Invoke(this, _localizationProvider.CurrentLocalizationCode);
             }
 
-            ChangeLanguageAction?.Invoke(this, _currentLanguage);
+            ChangeLanguageAction?.Invoke(this, _localizationProvider.CurrentLocalizationCode);
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-    }
-    
-    public void CallReferenceExecute(object param)
-    {
-        try
-        {
-            _referenceUseCase.CallReference(_currentLanguage);   
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    public void CallProgramDescription(object param)
+    private void CallReferenceExecute(object param)
     {
         try
         {
-            _referenceUseCase.CallProgramDescription(_currentLanguage);   
+            _referenceUseCase.CallReference(_localizationProvider.CurrentLocalizationCode);
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallProgramDescription(object param)
+    {
+        try
+        {
+            _referenceUseCase.CallProgramDescription(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void OpenExampleExecute(object obj)
+    {
+        try
+        {
+            string path = "example/example.txt";
+            OpenFile(path); 
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
