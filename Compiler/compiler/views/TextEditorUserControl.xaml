@@ -22,53 +22,108 @@
         </Grid.RowDefinitions>
         <!--Text editor -->
         <avalonedit:TextEditor SyntaxHighlighting="C#" x:Name="textEditor" Grid.Row="0"
-                               ShowLineNumbers="True" 
+                               ShowLineNumbers="True"
                                Document="{Binding TextDocument}"
                                PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"
                                TextChanged="TextEditor_OnTextChanged" />
 
         <GridSplitter Grid.Row="1" ShowsPreview="False" HorizontalAlignment="Stretch" Height="3"
                       VerticalAlignment="Center" />
-        <DataGrid
-            Grid.Row="2"
-            x:Name="DataGrid"
-            AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="False"
-            CanUserResizeColumns="False"
-            CanUserResizeRows="False"
-            CanUserSortColumns="False"
-            PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
-            ItemsSource="{Binding CompilationErrors}">
-            
-            <DataGrid.Columns>
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Index}"
-                    Header="{DynamicResource IndexHeader}">
-                </materialDesign:DataGridTextColumn>
 
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding FilePath}"
-                    Header="{DynamicResource FilePathHeader}"
-                    Width="5*" />
+        <TabControl Grid.Row="2"
+                    HorizontalContentAlignment="Left">
+            <TabItem
+                Header="{DynamicResource ErrorsHeader}">
+                <DataGrid
+                    x:Name="DataGrid"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    CanUserResizeRows="False"
+                    CanUserSortColumns="False"
+                    PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                    ItemsSource="{Binding CompilationErrors}">
 
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Line}"
-                    Header="{DynamicResource LineHeader}">
-                </materialDesign:DataGridTextColumn>
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding Index}"
+                            Header="{DynamicResource IndexHeader}">
+                        </materialDesign:DataGridTextColumn>
 
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Column}"
-                    Header="{DynamicResource ColumnHeader}">
-                </materialDesign:DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding FilePath}"
+                            Header="{DynamicResource FilePathHeader}"
+                            Width="5*" />
 
-                <materialDesign:DataGridTextColumn
-                    Binding="{Binding Message}"
-                    Header="{DynamicResource MessageHeader}"
-                    Width="4*">
-                </materialDesign:DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding Line}"
+                            Header="{DynamicResource LineHeader}">
+                        </materialDesign:DataGridTextColumn>
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding Column}"
+                            Header="{DynamicResource ColumnHeader}">
+                        </materialDesign:DataGridTextColumn>
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding Message}"
+                            Header="{DynamicResource MessageHeader}"
+                            Width="4*">
+                        </materialDesign:DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem
+                Header="{DynamicResource AnalyzerHeader}">
+                <DataGrid
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    CanUserResizeRows="False"
+                    CanUserSortColumns="False"
+                    PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                    ItemsSource="{Binding LexemeViewModels}">
+
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding LexemeCode}"
+                            Header="{DynamicResource LexemeCodeHeader}"
+                            Width="2*" />
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding LineNumber}"
+                            Header="{DynamicResource LineHeader}"
+                            Width="2*" />
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding StartIndex}"
+                            Header="{DynamicResource StartIndexHeader}"
+                            Width="2*" />
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding EndIndex}"
+                            Header="{DynamicResource EndIndexHeader}"
+                            Width="2*" />
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding LexemeTypeText}"
+                            Header="{DynamicResource LexemeTypeHeader}"
+                            Width="2*" />
+
+                        <materialDesign:DataGridTextColumn
+                            Binding="{Binding Lexeme}"
+                            Header="{DynamicResource LexemeHeader}"
+                            Width="2*">
+                        </materialDesign:DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+
     </Grid>
 </UserControl>

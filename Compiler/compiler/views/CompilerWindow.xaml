@@ -54,7 +54,7 @@
                 <MenuItem Command="{Binding}" Header="{DynamicResource SourceCodeHeader}" />
             </MenuItem>
 
-            <MenuItem Command="{Binding }" Header="{DynamicResource StartHeader}" />
+            <MenuItem Command="{Binding StartAnalyzationCommand}" Header="{DynamicResource StartHeader}" />
 
             <MenuItem Header="{DynamicResource ReferenceHeader}">
                 <MenuItem Command="{Binding CallReferenceCommand}" Header="{DynamicResource CallReferenceHeader}" />
@@ -102,7 +102,7 @@
                     Content="{materialDesign:PackIcon Kind=Import}"
                     ToolTip="{DynamicResource PutHeader}" />
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding StartAnalyzationCommand}"
                     Content="{materialDesign:PackIcon Kind=Play}"
                     ToolTip="{DynamicResource StartHeader}" />
                 <Button
@@ -111,7 +111,7 @@
                     ToolTip="{DynamicResource CallReferenceHeader}" />
 
                 <Button
-                    Command="{Binding}"
+                    Command="{Binding CallProgramDescriptionCommand}"
                     Content="{materialDesign:PackIcon Kind=InformationVariantCircle}"
                     ToolTip="{DynamicResource ProgrammDescriptionHeader}" />
                 <Button

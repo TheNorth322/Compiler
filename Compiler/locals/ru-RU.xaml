@@ -39,4 +39,15 @@
     <system:String x:Key="ColumnHeader">Колонка</system:String>
     <system:String x:Key="MessageHeader">Сообщение</system:String>
     <system:String x:Key="ChangeLanguageHeader">Change language</system:String>
+
+    <system:String x:Key="StartIndexHeader">Начало</system:String>
+    <system:String x:Key="EndIndexHeader">Конец</system:String>
+    <system:String x:Key="LexemeTypeHeader">Тип</system:String>
+    <system:String x:Key="LexemeHeader">Лексема</system:String>
+
+    <system:String x:Key="ErrorsHeader">Ошибки</system:String>
+    <system:String x:Key="AnalyzerHeader">Анализатор</system:String>
+    
+    <system:String x:Key="LexemeCodeHeader">Код лексемы</system:String>
+    
 </ResourceDictionary>

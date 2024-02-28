@@ -1,6 +1,9 @@
-﻿namespace Compiler.domain.repository;
+﻿using System.Collections.Generic;
+using Compiler.domain.entity;
+
+namespace Compiler.domain.repository;
 
 public interface ICompilerRepository
 {
-    void Compile();
+    List<Lexeme> Analyze(string input);
 }

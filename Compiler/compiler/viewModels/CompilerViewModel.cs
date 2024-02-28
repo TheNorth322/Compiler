@@ -40,6 +40,8 @@ public class CompilerViewModel : ViewModelBase
     public ICommand SaveCommand { get; }
     public ICommand CallProgramDescriptionCommand { get; }
 
+    public ICommand StartAnalyzationCommand { get; }
+
     public Action ExitButtonClicked { get; set; }
     public EventHandler<string> ChangeLanguageAction { get; set; }
     public Action ShowWantToSaveMessageBox { get; set; }
@@ -62,6 +64,7 @@ public class CompilerViewModel : ViewModelBase
         ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguageExecute);
         CallReferenceCommand = new RelayCommand<object>(CallReferenceExecute);
         CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription);
+        StartAnalyzationCommand = new RelayCommand<object>(StartAnalyzationExecute);
 
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
@@ -153,7 +156,7 @@ public class CompilerViewModel : ViewModelBase
 
             FileInfo fileInfo = new FileInfo("Новый документ.txt", "", ".txt", "");
             TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
-                fileInfo.FileExtension, fileInfo.FileContents);
+                fileInfo.FileExtension, fileInfo.FileContents, _compilerUseCase);
             _textEditorsViewModels.Add(vm);
             _selectedTextEditor = vm;
         }
@@ -246,13 +249,18 @@ public class CompilerViewModel : ViewModelBase
         }
     }
 
+    private void StartAnalyzationExecute(object param)
+    {
+        _selectedTextEditor.StartAnalyzation();
+    }
+    
     public void OpenFile(string filePath)
     {
         try
         {
             FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
             TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
-                fileInfo.FileExtension, fileInfo.FileContents);
+                fileInfo.FileExtension, fileInfo.FileContents, _compilerUseCase);
             _textEditorsViewModels.Add(vm);
             _selectedTextEditor = vm;
         }
@@ -279,13 +287,12 @@ public class CompilerViewModel : ViewModelBase
             MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
-
+    
     public void CallReferenceExecute(object param)
     {
         try
         {
-            string reference = "reference.html";
-            Process.Start(new ProcessStartInfo(reference) { UseShellExecute = true });
+            _referenceUseCase.CallReference(_currentLanguage);   
         }
         catch (Exception ex)
         {
@@ -297,8 +304,7 @@ public class CompilerViewModel : ViewModelBase
     {
         try
         {
-            string path = "description.html";
-            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            _referenceUseCase.CallProgramDescription(_currentLanguage);   
         }
         catch (Exception ex)
         {

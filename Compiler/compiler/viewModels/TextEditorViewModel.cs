@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Compiler.domain.entity;
+using Compiler.domain.useCases;
 using Compiler.utils;
 using ICSharpCode.AvalonEdit.Document;
 
@@ -10,6 +12,8 @@ public class TextEditorViewModel : ViewModelBase
 {
     private string _syntaxHighlightingCode;
     private ObservableCollection<CompilationErrorViewModel> _compilationErrors;
+    private ObservableCollection<LexemeViewModel> _lexemeViewModels;
+    private CompilerUseCase _compilerUseCase;
     
     private string _originalFileName;
     private string _fileName;
@@ -30,10 +34,13 @@ public class TextEditorViewModel : ViewModelBase
     public TextEditorViewModel()
     {
         _compilationErrors = new ObservableCollection<CompilationErrorViewModel>();
+        _lexemeViewModels = new ObservableCollection<LexemeViewModel>();
     }
 
-    public TextEditorViewModel(string fileName, string filePath, string fileExtension, string fileContents) : this()
+    public TextEditorViewModel(string fileName, string filePath, string fileExtension, string fileContents, CompilerUseCase  compilerUseCase) : this()
     {
+        _compilerUseCase = compilerUseCase;
+        
         _fileName = fileName;
         _filePath = filePath;
         _fileContents = fileContents;
@@ -41,10 +48,12 @@ public class TextEditorViewModel : ViewModelBase
         _saved = true;
         _originalFileName = fileName;
         GetSyntaxHighlightingCode();
+        
         _compilationErrors.Add(new CompilationErrorViewModel(1,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
         _compilationErrors.Add(new CompilationErrorViewModel(2,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
         _compilationErrors.Add(new CompilationErrorViewModel(3,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
         _compilationErrors.Add(new CompilationErrorViewModel(4,"C:\\Users\thenorth\\RiderProjects\\Compiler\\Compiler\\compiler\\viewModels\\TextEditorViewModel.cs", 2, 2, "Message" ));
+        
         _textDocument = new TextDocument(fileContents); 
     }
 
@@ -117,6 +126,15 @@ public class TextEditorViewModel : ViewModelBase
         }
     }
 
+    public ObservableCollection<LexemeViewModel> LexemeViewModels
+    {
+        get => _lexemeViewModels;
+        set
+        {
+            _lexemeViewModels = value;
+            OnPropertyChanged(nameof(LexemeViewModels));
+        }
+    }
     public EventHandler<string> ChangeLanguageEvent { get; set; }
 
     public void UpdateCompilationErrors(ObservableCollection<CompilationErrorViewModel> compilationErrorViewModels)
@@ -162,5 +180,15 @@ public class TextEditorViewModel : ViewModelBase
     {
         Saved = false;
         Header = "* " + _originalFileName;
+    }
+
+    public void StartAnalyzation()
+    {
+        this._lexemeViewModels.Clear();
+        List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
+        foreach (Lexeme lexeme in lexemes)
+        {
+            _lexemeViewModels.Add(new LexemeViewModel(lexeme)); 
+        }
     }
 }

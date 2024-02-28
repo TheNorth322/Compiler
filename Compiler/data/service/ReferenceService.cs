@@ -1,16 +1,19 @@
-﻿using Compiler.domain.repository;
+﻿using System.Diagnostics;
+using Compiler.domain.repository;
 
 namespace Compiler.data.service;
 
 public class ReferenceService : IReferenceRepository
 {
-    public void CallReference()
+    public void CallReference(string localization)
     {
-        throw new System.NotImplementedException();
+        string reference = $"reference-{localization}.html";
+        Process.Start(new ProcessStartInfo(reference) { UseShellExecute = true });
     }
 
-    public void OpenProgramDescription()
+    public void CallProgramDescription(string localization)
     {
-        throw new System.NotImplementedException();
+        string path = $"description-{localization}.html";
+        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
     }
 }

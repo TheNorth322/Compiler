@@ -1,4 +1,6 @@
-﻿using Compiler.domain.repository;
+﻿using System.Collections.Generic;
+using Compiler.domain.entity;
+using Compiler.domain.repository;
 
 namespace Compiler.domain.useCases;
 
@@ -10,4 +12,9 @@ public class CompilerUseCase
     {
         _compilerRepository = compilerRepository;
     }
+
+    public List<Lexeme> Analyze(string input)
+    {
+        return _compilerRepository.Analyze(input);
+    } 
 }
