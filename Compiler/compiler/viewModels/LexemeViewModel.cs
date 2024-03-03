@@ -6,7 +6,6 @@ namespace Compiler.compiler.viewModels;
 
 public class LexemeViewModel : ViewModelBase
 {
-    private int _lineNumber;
     private int _startIndex;
     private int _endIndex;
     private int _lexemeCode;
@@ -15,7 +14,6 @@ public class LexemeViewModel : ViewModelBase
 
     public LexemeViewModel(int lineNumber, int startIndex, int endIndex, string lexemeType, string lexeme)
     {
-        _lineNumber = lineNumber;
         _startIndex = startIndex;
         _endIndex = endIndex;
         _lexemeType = lexemeType;
@@ -24,23 +22,11 @@ public class LexemeViewModel : ViewModelBase
 
     public LexemeViewModel(Lexeme lexeme)
     {
-        _lineNumber = lexeme.LineNumber;
         _startIndex = lexeme.StartIndex;
         _endIndex = lexeme.EndIndex;
         _lexemeCode = (int) lexeme.Type; 
         _lexemeType = ConvertLexemeTypeToString(lexeme.Type);
         _lexeme = lexeme.Text;
-    }
-
-
-    public int LineNumber
-    {
-        get => _lineNumber;
-        set
-        {
-            _lineNumber = value;
-            OnPropertyChanged(nameof(LineNumber));
-        }
     }
 
     public int StartIndex
@@ -109,6 +95,10 @@ public class LexemeViewModel : ViewModelBase
                     return provider.GetStringByCode("IdentifierHeader");
                 case LexemeType.Separator:
                     return provider.GetStringByCode("SeparatorHeader");
+                case LexemeType.Tabulation:
+                    return provider.GetStringByCode("TabulationHeader");
+                case LexemeType.LineBreak:
+                    return provider.GetStringByCode("LineBreakHeader");
                 case LexemeType.TypeAssignmentOperator:
                     return provider.GetStringByCode("TypeAssignmentOperatorHeader");
                 case LexemeType.AssignmentOperator:

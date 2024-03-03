@@ -13,7 +13,6 @@ public class CompilerService : ICompilerRepository
         List<Lexeme> lexemes = new List<Lexeme>();
 
         int currentIndex = 0;
-        int currentLineNumber = 1;
         string lexeme = "";
         
         // Iterate through input string
@@ -35,7 +34,7 @@ public class CompilerService : ICompilerRepository
                 }
 
                 LexemeType type = GetKeywordType(lexeme);
-                lexemes.Add(new Lexeme(type, lexeme, startIndex, currentIndex++, currentLineNumber));
+                lexemes.Add(new Lexeme(type, lexeme, startIndex, currentIndex++));
             }
             // Constant strings
             else if (input[currentIndex] == '\'')
@@ -50,7 +49,7 @@ public class CompilerService : ICompilerRepository
                     lexeme += input[currentIndex];
                 }
 
-                lexemes.Add(new Lexeme(LexemeType.StringConstant, lexeme, startIndex, currentIndex++, currentLineNumber));
+                lexemes.Add(new Lexeme(LexemeType.StringConstant, lexeme, startIndex, currentIndex++));
             }
             // Unsigned integers 
             else if (char.IsDigit(input[currentIndex]))
@@ -65,22 +64,17 @@ public class CompilerService : ICompilerRepository
                     lexeme += input[currentIndex];
                 }
 
-                lexemes.Add(new Lexeme(LexemeType.UnsignedInteger, lexeme, startIndex, currentIndex++, currentLineNumber));
+                lexemes.Add(new Lexeme(LexemeType.UnsignedInteger, lexeme, startIndex, currentIndex++));
             }
             else if (input[currentIndex] == '\r')
             {
                 currentIndex++;
             }
-            else if (input[currentIndex] == '\n')
-            {
-                currentIndex++;
-                currentLineNumber++;
-            }
             // Special symbols (:, =, ;, whitespace, \t)
             else
             {
                 LexemeType symbolType = GetSymbolType(input[currentIndex]);
-                lexemes.Add(new Lexeme(symbolType, lexeme, currentIndex, currentIndex, currentLineNumber));
+                lexemes.Add(new Lexeme(symbolType, lexeme, currentIndex, currentIndex));
                 currentIndex++;
             }
         }
@@ -99,8 +93,11 @@ public class CompilerService : ICompilerRepository
             case ';':
                 return LexemeType.EndOfStatement;
             case ' ':
+                return LexemeType.Separator;
             case '\t':
-                return LexemeType.Separator;        
+                return LexemeType.Tabulation;
+            case '\n':
+                return LexemeType.LineBreak;
             default:
                 return LexemeType.Invalid;
         }

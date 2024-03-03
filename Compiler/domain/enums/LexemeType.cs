@@ -10,10 +10,12 @@ public enum LexemeType
     False = 6,
     Identifier = 7,
     Separator = 8,
-    TypeAssignmentOperator = 9,
-    AssignmentOperator = 10,
-    StringConstant = 11,
-    UnsignedInteger = 12,
-    EndOfStatement = 13,
-    Invalid = 14
+    LineBreak = 9,
+    Tabulation = 10,
+    TypeAssignmentOperator = 11,
+    AssignmentOperator = 12,
+    StringConstant = 13,
+    UnsignedInteger = 14,
+    EndOfStatement = 15,
+    Invalid = 16
 }

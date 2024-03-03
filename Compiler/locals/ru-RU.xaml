@@ -64,4 +64,8 @@
     <system:String x:Key="EndOfExpressionHeader">Конец выражения</system:String>
     <system:String x:Key="InvalidLexemeHeader">Неверная лексема</system:String>
     <system:String x:Key="Error">Ошибка</system:String>
+    
+    
+    <system:String x:Key="TabulationHeader">Табуляция</system:String>
+    <system:String x:Key="LineBreakHeader">Перенос строки</system:String>
 </ResourceDictionary>

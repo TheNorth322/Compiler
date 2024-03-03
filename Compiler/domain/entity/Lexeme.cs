@@ -8,14 +8,12 @@ public struct Lexeme
     public string Text;
     public int StartIndex;
     public int EndIndex;
-    public int LineNumber;
 
-    public Lexeme(LexemeType type, string text, int startIndex, int endIndex, int lineNumber)
+    public Lexeme(LexemeType type, string text, int startIndex, int endIndex)
     {
         Type = type;
         Text = text;
         StartIndex = startIndex;
         EndIndex = endIndex;
-        LineNumber = lineNumber;
     }
 }

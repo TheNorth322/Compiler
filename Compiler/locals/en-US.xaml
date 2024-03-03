@@ -64,4 +64,7 @@
     <system:String x:Key="EndOfExpressionHeader">End of expression</system:String>
     <system:String x:Key="InvalidLexemeHeader">Invalid lexeme</system:String>
     <system:String x:Key="Error">Error</system:String>
+
+    <system:String x:Key="TabulationHeader">Tabulation</system:String>
+    <system:String x:Key="LineBreakHeader">Line break</system:String>
 </ResourceDictionary>
