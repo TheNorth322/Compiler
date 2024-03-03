@@ -94,10 +94,6 @@
                             Binding="{Binding LexemeCode}"
                             Header="{DynamicResource LexemeCodeHeader}"
                             Width="2*" />
-                        <materialDesign:DataGridTextColumn
-                            Binding="{Binding LineNumber}"
-                            Header="{DynamicResource LineHeader}"
-                            Width="2*" />
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding StartIndex}"
