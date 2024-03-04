@@ -80,7 +80,8 @@
   ```
 
 ## Диаграмма состояний сканера
-![diagram (1)](https://github.com/TheNorth322/Compiler/assets/70006380/1756b9e2-977e-4aa6-8cb1-8ade150c2f78)
+![309566022-1756b9e2-977e-4aa6-8cb1-8ade150c2f78](https://github.com/TheNorth322/Compiler/assets/70006380/00f7b3b1-5ca4-4857-95de-8f4808033208)
+
 
 ## Тестовые примеры
 1. Тест №1
