@@ -109,6 +109,10 @@ Const he11oWorld: string = 'Hello World';
 ```
 Const Stroka: string = 'Привет'; Const he11oWorld: string = 'Hello World';
 ```
+```
+Const Stroka: string = 'Привет';
+Const he11oWorld: string = 'Hello World';
+```
 
 ## Разработанная грамматика
 G[<СК>] = { V<sub>T</sub>, V<sub>N</sub>, P, <СК> }
