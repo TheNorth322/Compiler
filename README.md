@@ -101,17 +101,17 @@
 
 ## Примеры допустимых строк
 ```
-Const Stroka: string = 'Привет';
+Const Stroka:string='Привет';
 ```
 ```
-Const he11oWorld: string = 'Hello World';
+Const he11oWorld:string='Hello World';
 ```
 ```
-Const Stroka: string = 'Привет'; Const he11oWorld: string = 'Hello World';
+Const Stroka:string='Привет'; Const he11oWorld:string='Hello World';
 ```
 ```
-Const Stroka: string = 'Привет';
-Const he11oWorld: string = 'Hello World';
+Const Stroka:string='Привет';
+Const he11oWorld:string='Hello World';
 ```
 
 ## Разработанная грамматика
@@ -119,33 +119,29 @@ G[<СК>] = { V<sub>T</sub>, V<sub>N</sub>, P, <СК> }
 
 V<sub>T</sub> = { 'Const', 'string', 'a'...'z', 'A'...'Z', '0'...'9', ':', '=', ';', '_', ' ' }
 
-V<sub>N</sub> = { ID_SPACE, ID, TYPE_ASSIGN, TYPE_SPACE, TYPE, ASSIGN_SPACE, ASSIGN, STRING_ASSIGN, STRING_BEGIN, STRING, STRING_END, END_EXPR, K}
+V<sub>N</sub> = { ID_SPACE, ID, TYPE_ASSIGN, TYPE, ASSIGN, STRING_BEGIN, STRING, STRING_END, END_EXPR }
 
 P: 
-1) <СК> -> Const ID_SPACE
+1) <СК> -> 'Const' ID_SPACE
 2) ID_SPACE -> ' ' ID
-3) ID -> letter{ letter | digit | _ } TYPE_ASSIGN
-4) TYPE_ASSIGN -> : TYPE_SPACE
-5) TYPE_SPACE -> ' ' TYPE
-6) TYPE -> string ASSIGN_SPACE
-7) ASSIGN_SPACE -> ' ' ASSIGN
-8) ASSIGN -> '=' STRING_ASSIGN
-9) STRING_ASSIGN -> ' ' STRING_BEGIN
-10) STRING_BEGIN -> ''' STRING
-11) STRING -> { letter | digit } STRING_END
-12) STRING_END -> ''' END_EXPR
-13) END_EXPR -> ; K
-14) K -> ε
-15) digit -> '0' | '1' | ... | '9'
-16) letter -> 'a' | ... | 'z' | 'A' | ... | 'Z'
+3) ID -> letter { letter | digit | '_' } TYPE_ASSIGN
+4) TYPE_ASSIGN -> : TYPE
+5) TYPE -> 'string' ASSIGN
+6) ASSIGN -> '=' STRING_BEGIN
+7) STRING_BEGIN -> ''' STRING
+8) STRING -> { letter | digit } STRING_END
+9) STRING_END -> ''' END_EXPR
+10) END_EXPR -> ;
+11) digit -> '0' | '1' | ... | '9'
+12) letter -> 'a' | ... | 'z' | 'A' | ... | 'Z'
    
 ## Классификация грамматики
-![linked_diagram](https://github.com/TheNorth322/Compiler/assets/70006380/25bbd576-e6a9-4287-989d-d0e4543f3034)
+![linked_diagram (1)](https://github.com/TheNorth322/Compiler/assets/70006380/4a9fcdb4-7590-42a5-809f-f334e13de541)
 
 Согласно классификации Хомского, грамматика G[<СК>] является полностью автоматной.
 
 ## Граф конечного автомата
-![Граф конечного автомати (1)](https://github.com/TheNorth322/Compiler/assets/70006380/5a9eec47-653b-4076-bee3-c3447bb95198)
+![Граф конечного автомати (2)](https://github.com/TheNorth322/Compiler/assets/70006380/4a64ffee-d5af-4880-8adf-7337c2a8ce96)
 
 ## Тестовые примеры
 
