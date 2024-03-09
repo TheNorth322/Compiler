@@ -80,7 +80,8 @@
   ```
 
 ## Диаграмма состояний сканера
-![diagram (1)](https://github.com/TheNorth322/Compiler/assets/70006380/1756b9e2-977e-4aa6-8cb1-8ade150c2f78)
+![309566022-1756b9e2-977e-4aa6-8cb1-8ade150c2f78](https://github.com/TheNorth322/Compiler/assets/70006380/00f7b3b1-5ca4-4857-95de-8f4808033208)
+
 
 ## Тестовые примеры
 1. Тест №1
@@ -90,8 +91,58 @@
 3. Тест №3
    ![image](https://github.com/TheNorth322/Compiler/assets/70006380/8fd5f5aa-caba-4340-832f-60a3dd8e36bb)
 
+# Лабораторная работа №3 "Разработка синтаксического анализатора (парсера)"
+Тема: **Разработка синтаксического анализатора (парсера).**
+Цель работы: Изучить назначение синтаксического анализатора. Спроектировать алгоритм и выполнить программную реализацию парсера.
 
+## Персональный вариант
+Объявление и инициализация строковой константы на языке Pascal
+Пример входной строки: Const Stroka: string = 'Привет';
+
+## Примеры допустимых строк
+```
+Const Stroka:string='Привет';
+```
+```
+Const he11oWorld:string='Hello World';
+```
+```
+Const Stroka:string='Привет'; Const he11oWorld:string='Hello World';
+```
+```
+Const Stroka:string='Привет';
+Const he11oWorld:string='Hello World';
+```
+
+## Разработанная грамматика
+G[<СК>] = { V<sub>T</sub>, V<sub>N</sub>, P, <СК> }
+
+V<sub>T</sub> = { 'Const', 'string', 'a'...'z', 'A'...'Z', '0'...'9', ':', '=', ';', '_', ' ' }
+
+V<sub>N</sub> = { ID_SPACE, ID, TYPE_ASSIGN, TYPE, ASSIGN, STRING_BEGIN, STRING, STRING_END, END_EXPR }
+
+P: 
+1) <СК> -> 'Const' ID_SPACE
+2) ID_SPACE -> ' ' ID
+3) ID -> letter { letter | digit | '_' } TYPE_ASSIGN
+4) TYPE_ASSIGN -> : TYPE
+5) TYPE -> 'string' ASSIGN
+6) ASSIGN -> '=' STRING_BEGIN
+7) STRING_BEGIN -> ''' STRING
+8) STRING -> { letter | digit } STRING_END
+9) STRING_END -> ''' END_EXPR
+10) END_EXPR -> ;
+11) digit -> '0' | '1' | ... | '9'
+12) letter -> 'a' | ... | 'z' | 'A' | ... | 'Z'
    
+## Классификация грамматики
+![linked_diagram (1)](https://github.com/TheNorth322/Compiler/assets/70006380/4a9fcdb4-7590-42a5-809f-f334e13de541)
 
+Согласно классификации Хомского, грамматика G[<СК>] является полностью автоматной.
+
+## Граф конечного автомата
+![Граф конечного автомати (2)](https://github.com/TheNorth322/Compiler/assets/70006380/4a64ffee-d5af-4880-8adf-7337c2a8ce96)
+
+## Тестовые примеры
 
 
