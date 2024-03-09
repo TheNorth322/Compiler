@@ -6,19 +6,16 @@ namespace Compiler.compiler.viewModels;
 public class CompilationErrorViewModel : ViewModelBase
 {
     private int _index;
-    private string _filePath;
-    private int _line;
-    private int _column;
+    private int _startIndex;
+    private int _endIndex;
     private string _message;
 
-    public CompilationErrorViewModel(int index, string filePath, int line, int column, string message)
+    public CompilationErrorViewModel(int index, int startIndex, int endIndex, string message)
     {
         _index = index;
-        _filePath = filePath;
-        _line = line;
-        _column = column;
+        _startIndex = startIndex;
+        _endIndex = endIndex;
         _message = message;
-        _index = index;
     }
 
     public int Index
@@ -30,34 +27,24 @@ public class CompilationErrorViewModel : ViewModelBase
             OnPropertyChanged(nameof(Index));
         }
     }
-    
-    public string FilePath
+
+    public int StartIndex
     {
-        get => _filePath;
+        get => _startIndex;
         set
         {
-            _filePath = value;
-            OnPropertyChanged(nameof(FilePath));
+            _startIndex = value;
+            OnPropertyChanged(nameof(StartIndex));
         }
     }
 
-    public int Line
+    public int EndIndex
     {
-        get => _line;
+        get => _endIndex;
         set
         {
-            _line = value;
-            OnPropertyChanged(nameof(Line));
-        }
-    }
-
-    public int Column
-    {
-        get => _column;
-        set
-        {
-            _column = value;
-            OnPropertyChanged(nameof(Column));
+            _endIndex = value;
+            OnPropertyChanged(nameof(EndIndex));
         }
     }
 

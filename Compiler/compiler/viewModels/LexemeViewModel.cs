@@ -103,6 +103,8 @@ public class LexemeViewModel : ViewModelBase
                     return provider.GetStringByCode("TypeAssignmentOperatorHeader");
                 case LexemeType.AssignmentOperator:
                     return provider.GetStringByCode("AssignmentOperatorHeader");
+                case LexemeType.StringSeparator:
+                    return provider.GetStringByCode("StringSeparatorHeader");
                 case LexemeType.StringConstant:
                     return provider.GetStringByCode("StringConstHeader");
                 case LexemeType.UnsignedInteger:

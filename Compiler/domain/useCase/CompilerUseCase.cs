@@ -16,5 +16,10 @@ public class CompilerUseCase
     public List<Lexeme> Analyze(string input)
     {
         return _compilerRepository.Analyze(input);
-    } 
+    }
+
+    public List<ErrorLexeme> Parse(string input)
+    {
+        return _compilerRepository.Parse(input);
+    }
 }

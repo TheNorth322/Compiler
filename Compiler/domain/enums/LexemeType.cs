@@ -15,7 +15,8 @@ public enum LexemeType
     TypeAssignmentOperator = 11,
     AssignmentOperator = 12,
     StringConstant = 13,
-    UnsignedInteger = 14,
-    EndOfStatement = 15,
-    Invalid = 16
+    StringSeparator = 14,
+    UnsignedInteger = 15,
+    EndOfStatement = 16,
+    Invalid = 17
 }

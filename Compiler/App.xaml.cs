@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Compiler.compiler.viewModels;
+using Compiler.data.lexer.Interface;
+using Compiler.data.parser;
 using Compiler.data.service;
 using Compiler.domain.useCases;
 
@@ -21,7 +23,7 @@ namespace Compiler
         protected override void OnStartup(StartupEventArgs e)
         {
             CompilerViewModel compilerViewModel = new CompilerViewModel(new FileUseCase(new FileService()),
-                new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService()),
+                new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService(new StringLexer(), new Parser(new StringLexer()))),
                 new ReferenceUseCase(new ReferenceService()));
             this.MainWindow = new CompilerWindow(compilerViewModel);
             

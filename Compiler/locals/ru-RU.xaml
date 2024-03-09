@@ -53,7 +53,7 @@
     <system:String x:Key="ExceptionHeader">Ошибка</system:String>
 
     <system:String x:Key="NewDocumentHeader">Новый документ.txt</system:String>
-
+    
     <system:String x:Key="KeyWordHeader">Ключевое слово</system:String>
     <system:String x:Key="IdentifierHeader">Идентификатор</system:String>
     <system:String x:Key="SeparatorHeader">Разделитель</system:String>
@@ -68,4 +68,8 @@
     
     <system:String x:Key="TabulationHeader">Табуляция</system:String>
     <system:String x:Key="LineBreakHeader">Перенос строки</system:String>
+    
+    <system:String x:Key="WaitedForText">Ожидалось</system:String>
+    
+    <system:String x:Key="StringSeparatorHeader">Разделитель строки</system:String>
 </ResourceDictionary>

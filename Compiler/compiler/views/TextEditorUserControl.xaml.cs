@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Compiler.compiler.viewModels;
+using MaterialDesignThemes.Wpf;
 
 namespace Compiler.compiler.views;
 
@@ -34,6 +35,58 @@ public partial class TextEditorUserControl : UserControl
         ((this.DataContext as TextEditorViewModel)!).CancelButtonClicked += OnCancelButtonClicked;
         ((this.DataContext as TextEditorViewModel)!).RepeatButtonClicked += OnRepeatButtonClicked;
         ((this.DataContext as TextEditorViewModel)!).ChangeLanguageEvent += OnChangeLanguageEvent;
+        ((this.DataContext as TextEditorViewModel)!).UpdateErrorsCounter += OnUpdateErrorsCount;
+    }
+
+    private void OnUpdateErrorsCount(object sender, int count)
+    {
+        if (count == 0)
+        {
+            ErrorsCounterIcon.Kind = PackIconKind.CheckboxMarkedCircle;
+            ErrorsCounterIcon.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            ErrorsCounterIcon.Kind = PackIconKind.AlertCircleOutline;
+            ErrorsCounterIcon.Visibility = Visibility.Visible;
+            ErrorsCounter.Visibility = Visibility.Visible;
+        } 
+    }
+    
+    private void HighlightText(int startIndex, int endIndex)
+    {
+        textEditor.Select(0,0);
+        textEditor.Select(startIndex, (endIndex - startIndex) + 1);
+    }
+
+    private void DataGridErrors_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 1)
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid != null)
+            {
+                CompilationErrorViewModel vm = grid.SelectedItem as CompilationErrorViewModel; 
+                int startIndex = vm.StartIndex;
+                int endIndex = vm.EndIndex;
+                HighlightText(startIndex, endIndex);
+            }
+        }
+    }
+
+    private void DataGridLexemes_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 1) 
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid != null)
+            {
+                LexemeViewModel vm = grid.SelectedItem as LexemeViewModel; 
+                int startIndex = vm.StartIndex;
+                int endIndex = vm.EndIndex;
+                HighlightText(startIndex, endIndex);
+            }
+        }
     }
 
     private void OnChangeLanguageEvent(object? sender, string cultureCode)
@@ -42,7 +95,7 @@ public partial class TextEditorUserControl : UserControl
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
-            
+
             Application.Current.Resources.MergedDictionaries.Remove(local);
             local = new ResourceDictionary();
             local.Source = new Uri($"/locals/{cultureCode}.xaml", UriKind.RelativeOrAbsolute);

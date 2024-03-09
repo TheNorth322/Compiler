@@ -19,10 +19,12 @@
             <RowDefinition Height="6*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="4*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--Text editor -->
         <avalonedit:TextEditor SyntaxHighlighting="C#" x:Name="textEditor" Grid.Row="0"
                                ShowLineNumbers="True"
+                               FontSize="16"
                                Document="{Binding TextDocument}"
                                PreviewMouseWheel="TextEditor_OnPreviewMouseWheel"
                                TextChanged="TextEditor_OnTextChanged" />
@@ -36,6 +38,7 @@
                 Header="{DynamicResource ErrorsHeader}">
                 <DataGrid
                     x:Name="DataGrid"
+                    IsReadOnly="True"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
                     CanUserDeleteRows="False"
@@ -44,6 +47,7 @@
                     CanUserResizeRows="False"
                     CanUserSortColumns="False"
                     PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                    MouseLeftButtonUp="DataGridErrors_MouseLeftButtonUp"
                     ItemsSource="{Binding CompilationErrors}">
 
                     <DataGrid.Columns>
@@ -53,18 +57,13 @@
                         </materialDesign:DataGridTextColumn>
 
                         <materialDesign:DataGridTextColumn
-                            Binding="{Binding FilePath}"
-                            Header="{DynamicResource FilePathHeader}"
-                            Width="5*" />
-
-                        <materialDesign:DataGridTextColumn
-                            Binding="{Binding Line}"
-                            Header="{DynamicResource LineHeader}">
+                            Binding="{Binding StartIndex}"
+                            Header="{DynamicResource StartIndexHeader}">
                         </materialDesign:DataGridTextColumn>
 
                         <materialDesign:DataGridTextColumn
-                            Binding="{Binding Column}"
-                            Header="{DynamicResource ColumnHeader}">
+                            Binding="{Binding EndIndex}"
+                            Header="{DynamicResource EndIndexHeader}">
                         </materialDesign:DataGridTextColumn>
 
                         <materialDesign:DataGridTextColumn
@@ -80,6 +79,7 @@
                 Header="{DynamicResource AnalyzerHeader}">
                 <DataGrid
                     AutoGenerateColumns="False"
+                    IsReadOnly="True"
                     CanUserAddRows="False"
                     CanUserDeleteRows="False"
                     CanUserReorderColumns="False"
@@ -87,6 +87,7 @@
                     CanUserResizeRows="False"
                     CanUserSortColumns="False"
                     PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                    MouseLeftButtonUp="DataGridLexemes_MouseLeftButtonUp"
                     ItemsSource="{Binding LexemeViewModels}">
 
                     <DataGrid.Columns>
@@ -120,6 +121,15 @@
             </TabItem>
         </TabControl>
 
-
+        <Grid Grid.Row="3" VerticalAlignment="Center">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="CheckboxMarkedCircleOutline" x:Name="ErrorsCounterIcon" Width="20" Height="20" />
+                <TextBlock
+                    x:Name="ErrorsCounter"
+                    Style="{StaticResource MaterialDesignBody2TextBlock}"
+                    Text="{Binding ErrorsCount}"
+                    Visibility="Hidden" />
+            </DockPanel>
+        </Grid>
     </Grid>
 </UserControl>
