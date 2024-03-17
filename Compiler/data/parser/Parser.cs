@@ -1,125 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Compiler.data.lexer.Interface;
-using Compiler.data.parser.Interface;
-using Compiler.data.parser.states;
+using System.Printing;
+using Compiler.data.parser.state;
 using Compiler.domain.entity;
 using Compiler.domain.enums;
-using Compiler.utils;
 
 namespace Compiler.data.parser;
 
 public class Parser : IParser
 {
-    public ILexer Lexer { get; }
-    private List<ParsingError> _errorLexemes;
     private List<IState> _states;
-    private int _currentState;
-    
-    public Parser(ILexer lexer)
+    private int _currentStateIndex;
+
+    public Parser()
     {
-        this.Lexer = lexer;
-        _errorLexemes = new List<ParsingError>();
         _states = new List<IState>();
 
         _states.Add(new ConstState(this));
         _states.Add(new IdSpaceState(this));
         _states.Add(new IdState(this));
-        _states.Add(new TypeAssignState(this));
+        _states.Add(new TypeAssignmentState(this));
         _states.Add(new TypeState(this));
-        _states.Add(new AssignState(this));
+        _states.Add(new AssignmentState(this));
         _states.Add(new StringBeginState(this));
         _states.Add(new StringState(this));
         _states.Add(new StringEndState(this));
         _states.Add(new EndExpressionState(this));
     }
 
-    public void MoveState()
-    {
-        _currentState = (_states.Count - 1 == _currentState)
-            ? 0
-            : _currentState + 1;
-    }
-
-    public void AddErrorLexeme(ParsingError lexeme)
-    {
-        _errorLexemes.Add(lexeme);
-    }
-
-    public ParsingError FindLexeme(Lexeme lexeme, LexemeType expectedType, string expectedValue)
-    {
-        int index = lexeme.Text.IndexOf(expectedValue, StringComparison.Ordinal);
-        if (index != -1)
-        {
-            int start = index;
-            int end = start + expectedValue.Length;
-
-            string leftPart = lexeme.Text.Substring(0, start);
-            string rightPart = lexeme.Text.Substring(end);
-
-            return new ParsingError(expectedValue, lexeme.Text, lexeme.StartIndex, lexeme.StartIndex + end,
-                $"{leftPart} {rightPart}", true);
-        }
-        else
-        {
-            return new ParsingError(expectedValue, lexeme.Text, lexeme.StartIndex, lexeme.EndIndex,
-                $"{lexeme.Text}", false);
-        }
-    }
-
-
     public List<ParsingError> Parse(string input)
     {
-        List<Lexeme> lexemes = Lexer.Analyze(input);
+        _currentStateIndex = 0;
+        List<ParsingError> parsingErrors = new List<ParsingError>();
 
-        _errorLexemes.Clear();
-        _currentState = 0;
-
-        // Iterate through lexemes
-        for (int i = 0; i < lexemes.Count; i++)
+        for (int i = 0; i < input.Length - 1; i++)
         {
-            Lexeme lexeme = lexemes[i];
-            
-            // Try to parse lexeme
-            bool lexemeFound = _states[_currentState].Parse(lexeme);
-            
-            // Check if there is an error after parsing this lexeme
-            if (!lexemeFound)
+            ParsingError? parsingError = _states[_currentStateIndex].Parse(ref i, input);
+            AddParsingError(parsingErrors, parsingError);
+        }
+
+        CheckForUnfinishedString(parsingErrors);
+        return parsingErrors;
+    }
+
+    public void MoveState()
+    {
+        _currentStateIndex = (_currentStateIndex == _states.Count - 1) ? 0 : _currentStateIndex + 1;
+    }
+
+    public string AutoFix(string input)
+    {
+        _currentStateIndex = 0;
+
+        for (int i = 0; i < input.Length - 1; i++)
+        {
+            ParsingError? parsingError = _states[_currentStateIndex].Parse(ref i, input);
+            FixParsingError(ref input, ref i, parsingError);
+        }
+
+        return input;
+    }
+
+    private void FixParsingError(ref string input, ref int i, ParsingError? parsingError)
+    {
+        if (parsingError != null)
+        {
+            foreach (ErrorFragment fragment in parsingError.Errors)
             {
-                IronsMethod(lexemes, ref i);
-            }
+                int length = fragment.EndIndex - fragment.StartIndex + 1;
+                input = input.Remove(fragment.StartIndex, length);
+                i -= length;
+            }  
         }
-
-        CheckError();
-        return _errorLexemes;
     }
-
-    private void IronsMethod(List<Lexeme> lexemes, ref int currentIndex)
+    
+    private void CheckForUnfinishedString(List<ParsingError> parsingErrors)
     {
-        int nextState = _currentState;
-              
-        while (_states[nextState].ErrorLexeme != null && currentIndex < lexemes.Count - 1)
+        if (_currentStateIndex != _states.Count - 1)
         {
-            // Move to the next lexeme
-            currentIndex++;
-            Lexeme nextLexeme = lexemes[currentIndex];
-
-            // Try to parse the lexeme with the current state
-            bool result = _states[nextState].Parse(nextLexeme);
-
-            // If no error found, update the state and exit the loop
-            if (result)
-                break;
+            parsingErrors.Add(new ParsingError("unfinished string", new List<ErrorFragment>(),
+                ParsingErrorType.UnfinishedString));
         }
     }
 
-    private void CheckError()
+    private void AddParsingError(List<ParsingError> parsingErrors, ParsingError? parsingError)
     {
-        if (_states[_currentState].ErrorLexeme != null)
-        {
-            this.AddErrorLexeme(_states[_currentState].ErrorLexeme);
-            _states[_currentState].ErrorLexeme = null;
-        }
+        if (parsingError != null)
+            parsingErrors.Add(parsingError);
     }
 }

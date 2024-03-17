@@ -1,4 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using Compiler.data.parser;
+using Compiler.domain.entity;
+using Compiler.domain.enums;
 using Compiler.utils;
 
 namespace Compiler.compiler.viewModels;
@@ -9,21 +15,31 @@ public class CompilationErrorViewModel : ViewModelBase
     private int _startIndex;
     private int _endIndex;
     private string _expectedLexeme;
-    private string _receivedLexeme;
     private string _partToDismiss;
     private string _message;
-        
-    public CompilationErrorViewModel(int index, int startIndex, int endIndex, string expectedLexeme, string receivedLexeme, string partToDismiss)
+    public List<ErrorFragment> _errorFragments;
+    
+    public CompilationErrorViewModel(int index, ParsingError parsingError)
     {
         _index = index;
-        _startIndex = startIndex;
-        _endIndex = endIndex;
-        _expectedLexeme = expectedLexeme;
-        _receivedLexeme = receivedLexeme;
-        _partToDismiss = partToDismiss;
+        
+        if (parsingError.ParsingErrorType == ParsingErrorType.Regular)
+        {
+            _startIndex = parsingError.Errors.First().StartIndex;
+            _endIndex = parsingError.Errors.Last().EndIndex;
+        }
+
+        _expectedLexeme = parsingError.ExpectedLexeme;
+        _errorFragments = parsingError.Errors;
+        _partToDismiss = "";
+        
+        foreach (ErrorFragment fragment in _errorFragments)
+        {
+            _partToDismiss += $"{fragment.Fragment} ";
+        }
         
         LocalizationProvider localizationProvider = LocalizationProvider.Instance;
-        _message = $"{localizationProvider.GetStringByCode("WaitedForText")} {expectedLexeme} ({localizationProvider.GetStringByCode("PartToDismiss")}: {partToDismiss})";
+        _message = $"{localizationProvider.GetStringByCode("WaitedForText")} {_expectedLexeme} ({localizationProvider.GetStringByCode("PartToDismiss")}: {_partToDismiss})";
     }
 
     public int Index

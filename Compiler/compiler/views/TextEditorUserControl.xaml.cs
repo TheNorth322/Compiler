@@ -84,6 +84,7 @@ public partial class TextEditorUserControl : UserControl
                 LexemeViewModel vm = grid.SelectedItem as LexemeViewModel; 
                 int startIndex = vm.StartIndex;
                 int endIndex = vm.EndIndex;
+                
                 HighlightText(startIndex, endIndex);
             }
         }

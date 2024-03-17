@@ -16,6 +16,9 @@ public class TextEditorViewModel : ViewModelBase
     private ObservableCollection<LexemeViewModel> _lexemeViewModels;
     private CompilerUseCase _compilerUseCase;
 
+    private string _compiledString;
+    private List<ParsingError> _parsingErrors;
+
     private int _errorsCount;
     private string _originalFileName;
     private string _fileName;
@@ -32,17 +35,20 @@ public class TextEditorViewModel : ViewModelBase
     public Action PutButtonClicked { get; set; }
     public Action CancelButtonClicked { get; set; }
     public Action RepeatButtonClicked { get; set; }
-    
+
     public EventHandler<TextEditorViewModel> CloseTab { get; set; }
     public EventHandler<int> UpdateErrorsCounter { get; set; }
 
     public ICommand CloseCommand { get; }
+
+    public ICommand AutoFixCommand { get; }
 
     public TextEditorViewModel()
     {
         _compilationErrors = new ObservableCollection<CompilationErrorViewModel>();
         _lexemeViewModels = new ObservableCollection<LexemeViewModel>();
         CloseCommand = new RelayCommand<object>(CloseExecute);
+        AutoFixCommand = new RelayCommand<object>(AutoFixExecute);
         _errorsCount = 0;
     }
 
@@ -204,8 +210,12 @@ public class TextEditorViewModel : ViewModelBase
         this._lexemeViewModels.Clear();
         _compilationErrors.Clear();
 
+
         List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
         List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
+
+        _compiledString = FileContents;
+        _parsingErrors = errors;
 
         ErrorsCount = errors.Count;
 
@@ -216,8 +226,7 @@ public class TextEditorViewModel : ViewModelBase
 
         for (int i = 0; i < errors.Count; i++)
         {
-            _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i].StartIndex,
-                errors[i].EndIndex, errors[i].ExpectedLexeme, errors[i].ReceivedLexeme, errors[i].PartToDismiss));
+            _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i]));
         }
 
         UpdateErrorsCounter?.Invoke(this, ErrorsCount);
@@ -226,5 +235,13 @@ public class TextEditorViewModel : ViewModelBase
     private void CloseExecute(object obj)
     {
         CloseTab?.Invoke(this, this);
+    }
+
+    private void AutoFixExecute(object obj)
+    {
+        FileContents = _compilerUseCase.AutoFix(_compiledString);
+        TextDocument = new TextDocument(FileContents);
+        _compiledString = FileContents;
+        this.StartAnalyzation();
     }
 }

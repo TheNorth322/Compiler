@@ -1,27 +1,20 @@
-﻿using Compiler.utils;
+﻿using System.Collections.Generic;
+using Compiler.data.parser;
+using Compiler.domain.enums;
+using Compiler.utils;
 
 namespace Compiler.domain.entity;
 
 public class ParsingError
 {
-    public ParsingError(string expectedLexeme, string receivedLexeme, int startIndex, int endIndex, string partToDismiss, bool isExpectedInReceived)
+    public ParsingError(string expectedLexeme, List<ErrorFragment> errors, ParsingErrorType type)
     {
         ExpectedLexeme = expectedLexeme;
-        ReceivedLexeme = receivedLexeme;
-        StartIndex = startIndex;
-        EndIndex = endIndex;
-        PartToDismiss = partToDismiss;
-        IsExpectedInReceived = isExpectedInReceived;
+        Errors = errors;
+        ParsingErrorType = type;
     }
 
     public string ExpectedLexeme { get; set; }
-
-    public string ReceivedLexeme { get; set; }
-
-    public int StartIndex { get; set; }
-    
-    public int EndIndex { get; set; }
-    public string PartToDismiss { get; set; }
-    
-    public bool IsExpectedInReceived { get; set; } 
+    public ParsingErrorType ParsingErrorType { get; set; }
+    public List<ErrorFragment> Errors { get; set; }
 }

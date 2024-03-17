@@ -22,4 +22,9 @@ public class CompilerUseCase
     {
         return _compilerRepository.Parse(input);
     }
+
+    public string AutoFix(string input)
+    {
+        return _compilerRepository.AutoFix(input);
+    }
 }

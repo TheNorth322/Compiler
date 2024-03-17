@@ -117,12 +117,20 @@
 
         <Grid Grid.Row="3" VerticalAlignment="Center">
             <DockPanel Margin="5"> 
-                <materialDesign:PackIcon Kind="CheckboxMarkedCircleOutline" x:Name="ErrorsCounterIcon" Width="20" Height="20" />
+                <materialDesign:PackIcon Kind="CheckboxMarkedCircleOutline" VerticalAlignment="Center" x:Name="ErrorsCounterIcon" Width="20" Height="20" />
                 <TextBlock
                     x:Name="ErrorsCounter"
+                    VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignBody2TextBlock}"
                     Text="{Binding ErrorsCount}"
                     Visibility="Hidden" />
+                <Button Background="White" Command="{Binding AutoFixCommand}" HorizontalAlignment="Right" BorderBrush="White">
+                    <materialDesign:PackIcon
+                        Width="12"
+                        Height="12"
+                        Foreground="Black"
+                        Kind="AutoFix" />
+                </Button>
             </DockPanel>
         </Grid>
     </Grid>

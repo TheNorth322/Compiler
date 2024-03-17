@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Compiler.data.lexer.Interface;
-using Compiler.data.parser.Interface;
+using Compiler.data.parser;
 using Compiler.domain.entity;
 using Compiler.domain.enums;
 using Compiler.domain.repository;
@@ -26,5 +26,10 @@ public class CompilerService : ICompilerRepository
     public List<ParsingError> Parse(string input)
     {
         return _parser.Parse(input);
-    } 
+    }
+
+    public string AutoFix(string input)
+    {
+        return _parser.AutoFix(input);
+    }
 }

@@ -24,11 +24,13 @@ public class StringLexer : ILexer
                 int startIndex = currentIndex;
 
                 // Build lexeme until special symbol or separator
-                while ((char.IsLetterOrDigit(input[currentIndex + 1]) || input[currentIndex + 1] == '_') &&
-                       (currentIndex + 1) < input.Length)
+                while ((char.IsLetterOrDigit(input[currentIndex]) || input[currentIndex] == '_') &&
+                       (currentIndex) < input.Length)
                 {
-                    currentIndex++;
                     lexeme += input[currentIndex];
+                    currentIndex++;
+                    if (currentIndex >= input.Length)
+                        break;
                 }
 
                 LexemeType type = GetKeywordType(lexeme);
