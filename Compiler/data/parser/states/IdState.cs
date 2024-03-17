@@ -8,24 +8,42 @@ namespace Compiler.data.parser.states;
 public class IdState : IState
 {
     private IParser _parser;
-    private LocalizationProvider _localizationProvider;
+    public ParsingError? ErrorLexeme { get; set; }
 
     public IdState(IParser parser)
     {
         _parser = parser;
-        _localizationProvider = LocalizationProvider.Instance;
     }
 
-    public void Parse(Lexeme lexeme)
+    public bool Parse(Lexeme lexeme)
     {
         if (lexeme.Type != LexemeType.Identifier)
         {
-            _parser.AddErrorLexeme(new ErrorLexeme(lexeme,
-                _localizationProvider.GetStringByCode("WaitedForText") + " ID"));
+           RememberLexeme(lexeme);
+           return false;
         }
         else
         {
-            _parser.SetState(_parser.TypeAssignState);
+            if (ErrorLexeme != null)
+            {
+                _parser.AddErrorLexeme(ErrorLexeme);
+                ErrorLexeme = null;
+            }
+
+            _parser.MoveState();
+            return true;
+        }
+    }
+
+    private void RememberLexeme(Lexeme lexeme)
+    {
+        if (ErrorLexeme == null)
+            ErrorLexeme = new ParsingError("ID", lexeme.Text, lexeme.StartIndex, lexeme.EndIndex, lexeme.Text);
+        else
+        {
+            ErrorLexeme.ReceivedLexeme += lexeme.Text;
+            ErrorLexeme.EndIndex = lexeme.EndIndex;
+            ErrorLexeme.PartToDismiss += lexeme.Text;
         }
     }
 }

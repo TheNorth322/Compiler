@@ -67,8 +67,9 @@
 
     <system:String x:Key="TabulationHeader">Tabulation</system:String>
     <system:String x:Key="LineBreakHeader">Line break</system:String>
-    <system:String x:Key="WaitedForText">Waited For</system:String>
+    <system:String x:Key="WaitedForText">Waited for</system:String>
    
+    <system:String x:Key="PartToDismiss">Part to dismiss</system:String>
     <system:String x:Key="StringSeparatorHeader">String separator</system:String>
     
 </ResourceDictionary>

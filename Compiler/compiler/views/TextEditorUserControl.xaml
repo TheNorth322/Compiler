@@ -68,8 +68,7 @@
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding Message}"
-                            Header="{DynamicResource MessageHeader}"
-                            Width="4*">
+                            Header="{DynamicResource MessageHeader}">
                         </materialDesign:DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -93,28 +92,23 @@
                     <DataGrid.Columns>
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding LexemeCode}"
-                            Header="{DynamicResource LexemeCodeHeader}"
-                            Width="2*" />
+                            Header="{DynamicResource LexemeCodeHeader}"/>
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding StartIndex}"
-                            Header="{DynamicResource StartIndexHeader}"
-                            Width="2*" />
+                            Header="{DynamicResource StartIndexHeader}"/>
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding EndIndex}"
-                            Header="{DynamicResource EndIndexHeader}"
-                            Width="2*" />
+                            Header="{DynamicResource EndIndexHeader}"/>
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding LexemeTypeText}"
-                            Header="{DynamicResource LexemeTypeHeader}"
-                            Width="2*" />
+                            Header="{DynamicResource LexemeTypeHeader}"/>
 
                         <materialDesign:DataGridTextColumn
                             Binding="{Binding Lexeme}"
-                            Header="{DynamicResource LexemeHeader}"
-                            Width="2*">
+                            Header="{DynamicResource LexemeHeader}">
                         </materialDesign:DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>

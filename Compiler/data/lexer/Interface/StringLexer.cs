@@ -37,11 +37,10 @@ public class StringLexer : ILexer
             // Constant strings
             else if (input[currentIndex] == '\'')
             {
-                int startIndex = currentIndex;
-                 
-                lexemes.Add(new Lexeme(LexemeType.StringSeparator, lexeme, startIndex, startIndex));
+                lexemes.Add(new Lexeme(LexemeType.StringSeparator, lexeme, currentIndex, currentIndex));
                 lexeme = "";
                 
+                int startIndex = currentIndex + 1;
                 // Build lexeme until special symbol or separator
                 while ((currentIndex + 1) < input.Length && input[currentIndex + 1] != '\'')
                 {
@@ -49,7 +48,7 @@ public class StringLexer : ILexer
                     lexeme += input[currentIndex];
                 }
 
-                lexemes.Add(new Lexeme(LexemeType.StringConstant, lexeme, startIndex, currentIndex + 1));
+                lexemes.Add(new Lexeme(LexemeType.StringConstant, lexeme, startIndex, currentIndex));
 
                 if ((currentIndex + 1) < input.Length && input[currentIndex + 1] == '\'')
                 {

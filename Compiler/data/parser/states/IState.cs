@@ -4,6 +4,8 @@ namespace Compiler.data.parser.states;
 
 public interface IState
 {
-   // receive lexeme and verify order
-   void Parse(Lexeme lexeme);
+    ParsingError? ErrorLexeme { get; set; }
+
+    // receive lexeme and verify order
+    bool Parse(Lexeme lexeme);
 }

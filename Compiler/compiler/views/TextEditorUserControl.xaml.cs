@@ -64,7 +64,7 @@ public partial class TextEditorUserControl : UserControl
         if (e.ClickCount == 1)
         {
             DataGrid grid = sender as DataGrid;
-            if (grid != null)
+            if (grid != null && grid.SelectedItem != null)
             {
                 CompilationErrorViewModel vm = grid.SelectedItem as CompilationErrorViewModel; 
                 int startIndex = vm.StartIndex;

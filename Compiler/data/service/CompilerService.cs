@@ -23,7 +23,7 @@ public class CompilerService : ICompilerRepository
         return _lexer.Analyze(input);
     }
 
-    public List<ErrorLexeme> Parse(string input)
+    public List<ParsingError> Parse(string input)
     {
         return _parser.Parse(input);
     } 

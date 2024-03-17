@@ -8,24 +8,44 @@ namespace Compiler.data.parser.states;
 public class StringBeginState : IState
 {
     private IParser _parser;
-    private LocalizationProvider _localizationProvider;
+    public ParsingError? ErrorLexeme { get; set; }
+    private const string ExpectedLexeme = "'";
 
     public StringBeginState(IParser parser)
     {
         _parser = parser;
-        _localizationProvider = LocalizationProvider.Instance;
     }
 
-    public void Parse(Lexeme lexeme)
+    public bool Parse(Lexeme lexeme)
     {
         if (lexeme.Type != LexemeType.StringSeparator)
         {
-            _parser.AddErrorLexeme(new ErrorLexeme(lexeme,
-                _localizationProvider.GetStringByCode("WaitedForText") + " \'"));
+            RememberLexeme(lexeme);
+            return false;
         }
         else
         {
-            _parser.SetState(_parser.StringState);
+            if (ErrorLexeme != null)
+            {
+                _parser.AddErrorLexeme(ErrorLexeme);
+                ErrorLexeme = null;
+            }
+
+            _parser.MoveState();
+            return true;
+        }
+    }
+
+    private void RememberLexeme(Lexeme lexeme)
+    {
+        if (ErrorLexeme == null)
+            ErrorLexeme = new ParsingError(ExpectedLexeme, lexeme.Text, lexeme.StartIndex, lexeme.EndIndex,
+                lexeme.Text);
+        else
+        {
+            ErrorLexeme.ReceivedLexeme += lexeme.Text;
+            ErrorLexeme.EndIndex = lexeme.EndIndex;
+            ErrorLexeme.PartToDismiss += lexeme.Text;
         }
     }
 }

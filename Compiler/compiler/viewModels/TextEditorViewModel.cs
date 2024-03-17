@@ -197,7 +197,7 @@ public class TextEditorViewModel : ViewModelBase
         _compilationErrors.Clear();
 
         List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
-        List<ErrorLexeme> errors = _compilerUseCase.Parse(FileContents);
+        List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
 
         ErrorsCount = errors.Count;
         
@@ -208,8 +208,8 @@ public class TextEditorViewModel : ViewModelBase
 
         for (int i = 0; i < errors.Count; i++)
         {
-            _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i].Lexeme.StartIndex,
-                errors[i].Lexeme.EndIndex, errors[i].Message));
+            _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i].StartIndex,
+                errors[i].EndIndex, errors[i].ExpectedLexeme, errors[i].ReceivedLexeme, errors[i].PartToDismiss));
         }
         UpdateErrorsCounter?.Invoke(this, ErrorsCount);
     }

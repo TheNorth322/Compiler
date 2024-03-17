@@ -8,14 +8,22 @@ public class CompilationErrorViewModel : ViewModelBase
     private int _index;
     private int _startIndex;
     private int _endIndex;
+    private string _expectedLexeme;
+    private string _receivedLexeme;
+    private string _partToDismiss;
     private string _message;
-
-    public CompilationErrorViewModel(int index, int startIndex, int endIndex, string message)
+        
+    public CompilationErrorViewModel(int index, int startIndex, int endIndex, string expectedLexeme, string receivedLexeme, string partToDismiss)
     {
         _index = index;
         _startIndex = startIndex;
         _endIndex = endIndex;
-        _message = message;
+        _expectedLexeme = expectedLexeme;
+        _receivedLexeme = receivedLexeme;
+        _partToDismiss = partToDismiss;
+        
+        LocalizationProvider localizationProvider = LocalizationProvider.Instance;
+        _message = $"{localizationProvider.GetStringByCode("WaitedForText")} {expectedLexeme} ({localizationProvider.GetStringByCode("PartToDismiss")}: {partToDismiss})";
     }
 
     public int Index

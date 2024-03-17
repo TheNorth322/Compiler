@@ -10,7 +10,7 @@
         xmlns:views="clr-namespace:Compiler.compiler.views"
         d:DataContext="{d:DesignInstance Type=viewModels:CompilerViewModel}"
         mc:Ignorable="d"
-        Title="Compiler" Height="450" Width="800">
+        Title="Compiler" Height="700" Width="1000">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:TextEditorViewModel}">
             <views:TextEditorUserControl />

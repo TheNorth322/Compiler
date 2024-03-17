@@ -71,5 +71,6 @@
     
     <system:String x:Key="WaitedForText">Ожидалось</system:String>
     
+    <system:String x:Key="PartToDismiss">Отброшенный фрагмент</system:String>
     <system:String x:Key="StringSeparatorHeader">Разделитель строки</system:String>
 </ResourceDictionary>
