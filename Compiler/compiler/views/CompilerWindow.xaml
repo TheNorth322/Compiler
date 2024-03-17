@@ -51,7 +51,7 @@
                 <MenuItem Command="{Binding CallDiagnosisCommand}" Header="{DynamicResource DiagnosisHeader}" />
                 <MenuItem Command="{Binding OpenExampleCommand}" Header="{DynamicResource ExampleHeader}" />
                 <MenuItem Command="{Binding CallLiteratureCommand}" Header="{DynamicResource BooksHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource SourceCodeHeader}" />
+                <MenuItem Command="{Binding CallSourceCodeCommand}" Header="{DynamicResource SourceCodeHeader}" />
             </MenuItem>
 
             <MenuItem Command="{Binding StartAnalyzationCommand}" Header="{DynamicResource StartHeader}" />
@@ -132,6 +132,18 @@
                         Orientation="Horizontal">
                         <TextBlock
                             Text="{Binding Header}" />
+                        <Button
+                            Margin="10 0 0 0"
+                            Command="{Binding CloseCommand}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <materialDesign:PackIcon
+                                        Kind="Close"
+                                        Foreground="Gray"
+                                        Background="Transparent" />
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

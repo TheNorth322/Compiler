@@ -116,7 +116,7 @@
         </TabControl>
 
         <Grid Grid.Row="3" VerticalAlignment="Center">
-            <DockPanel>
+            <DockPanel Margin="5"> 
                 <materialDesign:PackIcon Kind="CheckboxMarkedCircleOutline" x:Name="ErrorsCounterIcon" Width="20" Height="20" />
                 <TextBlock
                     x:Name="ErrorsCounter"

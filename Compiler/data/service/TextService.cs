@@ -35,6 +35,11 @@ public class TextService : ITextRepository
         OpenHtmlDocument($"references\\grammar-classification-{localization}.html");
     }
 
+    public void CallSourceCode(string localization)
+    {
+        OpenHtmlDocument($"references\\code-{localization}.html"); 
+    }
+
     private void OpenHtmlDocument(string path)
     {
         Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });

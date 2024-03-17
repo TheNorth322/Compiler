@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Compiler.domain.entity;
 using Compiler.domain.useCases;
 using Compiler.utils;
@@ -32,13 +33,19 @@ public class TextEditorViewModel : ViewModelBase
     public Action CancelButtonClicked { get; set; }
     public Action RepeatButtonClicked { get; set; }
     
+    public EventHandler<TextEditorViewModel> CloseTab { get; set; }
     public EventHandler<int> UpdateErrorsCounter { get; set; }
+
+    public ICommand CloseCommand { get; }
+
     public TextEditorViewModel()
     {
         _compilationErrors = new ObservableCollection<CompilationErrorViewModel>();
         _lexemeViewModels = new ObservableCollection<LexemeViewModel>();
+        CloseCommand = new RelayCommand<object>(CloseExecute);
         _errorsCount = 0;
     }
+
 
     public TextEditorViewModel(string fileName, string filePath, string fileExtension, string fileContents,
         CompilerUseCase compilerUseCase) : this()
@@ -84,6 +91,7 @@ public class TextEditorViewModel : ViewModelBase
             OnPropertyChanged(nameof(ErrorsCount));
         }
     }
+
     public string Header
     {
         get => _fileName;
@@ -200,7 +208,7 @@ public class TextEditorViewModel : ViewModelBase
         List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
 
         ErrorsCount = errors.Count;
-        
+
         foreach (Lexeme lexeme in lexemes)
         {
             _lexemeViewModels.Add(new LexemeViewModel(lexeme));
@@ -211,6 +219,12 @@ public class TextEditorViewModel : ViewModelBase
             _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i].StartIndex,
                 errors[i].EndIndex, errors[i].ExpectedLexeme, errors[i].ReceivedLexeme, errors[i].PartToDismiss));
         }
+
         UpdateErrorsCounter?.Invoke(this, ErrorsCount);
+    }
+
+    private void CloseExecute(object obj)
+    {
+        CloseTab?.Invoke(this, this);
     }
 }

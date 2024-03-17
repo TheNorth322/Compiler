@@ -22,9 +22,9 @@ public class EndExpressionState : IState
         {
             // Try to find expected lexeme in received
             ParsingError errorLexeme = _parser.FindLexeme(lexeme, LexemeType.Const, ExpectedLexeme);
-            
+
             RememberLexeme(errorLexeme);
-            CheckExpectedInReceived(errorLexeme); 
+            CheckExpectedInReceived(errorLexeme);
 
             return false;
         }
@@ -44,7 +44,7 @@ public class EndExpressionState : IState
     private void CheckExpectedInReceived(ParsingError parsingError)
     {
         // If expected value found in received
-        if (parsingError.ReceivedLexeme != parsingError.PartToDismiss)
+        if (parsingError.IsExpectedInReceived)
             AddLexeme();
     }
 
@@ -61,9 +61,14 @@ public class EndExpressionState : IState
             ErrorLexeme = errorLexeme;
         else
         {
-            ErrorLexeme.ReceivedLexeme += errorLexeme.ReceivedLexeme;
-            ErrorLexeme.EndIndex = errorLexeme.EndIndex;
-            ErrorLexeme.PartToDismiss += errorLexeme.PartToDismiss;
+            UpdateError(errorLexeme); 
         }
+    }
+
+    private void UpdateError(ParsingError lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.ReceivedLexeme;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.PartToDismiss;
     }
 }

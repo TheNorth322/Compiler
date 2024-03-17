@@ -54,7 +54,9 @@ public class CompilerViewModel : ViewModelBase
 
     public ICommand StartAnalyzationCommand { get; }
 
+    public ICommand CallSourceCodeCommand { get; }
     public ICommand CallDiagnosisCommand { get; }
+
     public Action ExitButtonClicked { get; set; }
     public EventHandler<string> ChangeLanguageAction { get; set; }
     public Action ShowWantToSaveMessageBox { get; set; }
@@ -85,6 +87,7 @@ public class CompilerViewModel : ViewModelBase
         CallDiagnosisCommand = new RelayCommand<object>(CallDiagnosisExecute);
         CallLiteratureCommand = new RelayCommand<object>(CallLiteratureExecute);
         CallGrammarClassificationCommand = new RelayCommand<object>(CallGrammarClassificationExecute);
+        CallSourceCodeCommand = new RelayCommand<object>(CallSourceCodeExecute);
 
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
@@ -181,6 +184,7 @@ public class CompilerViewModel : ViewModelBase
             FileInfo fileInfo = new FileInfo(header, "", ".txt", "");
             TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
                 fileInfo.FileExtension, fileInfo.FileContents, _compilerUseCase);
+            vm.CloseTab += OnCloseTab;
             _textEditorsViewModels.Add(vm);
             _selectedTextEditor = vm;
         }
@@ -300,6 +304,7 @@ public class CompilerViewModel : ViewModelBase
             FileInfo fileInfo = _fileUseCase.OpenFile(filePath);
             TextEditorViewModel vm = new TextEditorViewModel(fileInfo.FileName, fileInfo.FilePath,
                 fileInfo.FileExtension, fileInfo.FileContents, _compilerUseCase);
+            vm.CloseTab += OnCloseTab;
             _textEditorsViewModels.Add(vm);
             _selectedTextEditor = vm;
         }
@@ -460,6 +465,29 @@ public class CompilerViewModel : ViewModelBase
         try
         {
             _textUseCase.CallGrammarClassification(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void OnCloseTab(object sender, TextEditorViewModel vm)
+    {
+        if (_selectedTextEditor != vm)
+            _selectedTextEditor = _textEditorsViewModels[0];
+        vm.CloseTab -= OnCloseTab;
+        _textEditorsViewModels.Remove(vm);
+    }
+
+    private void CallSourceCodeExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallSourceCode(_localizationProvider.CurrentLocalizationCode);
         }
         catch (Exception ex)
         {

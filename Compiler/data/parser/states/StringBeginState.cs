@@ -40,12 +40,17 @@ public class StringBeginState : IState
     {
         if (ErrorLexeme == null)
             ErrorLexeme = new ParsingError(ExpectedLexeme, lexeme.Text, lexeme.StartIndex, lexeme.EndIndex,
-                lexeme.Text);
+                lexeme.Text, false);
         else
         {
-            ErrorLexeme.ReceivedLexeme += lexeme.Text;
-            ErrorLexeme.EndIndex = lexeme.EndIndex;
-            ErrorLexeme.PartToDismiss += lexeme.Text;
+            UpdateError(lexeme);
         }
+    }
+
+    private void UpdateError(Lexeme lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.Text;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.Text;
     }
 }

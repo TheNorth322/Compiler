@@ -40,4 +40,9 @@ public class TextUseCase
     {
         _textRepository.CallGrammarClassification(localization); 
     }
+
+    public void CallSourceCode(string localization)
+    {
+        _textRepository.CallSourceCode(localization);
+    }
 }

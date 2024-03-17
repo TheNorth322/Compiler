@@ -44,7 +44,7 @@ public class TypeAssignState : IState
     private void CheckExpectedInReceived(ParsingError parsingError)
     {
         // If expected value found in received
-        if (parsingError.ReceivedLexeme != parsingError.PartToDismiss)
+        if (parsingError.IsExpectedInReceived)
             AddLexeme();
     }
 
@@ -61,9 +61,14 @@ public class TypeAssignState : IState
             ErrorLexeme = errorLexeme;
         else
         {
-            ErrorLexeme.ReceivedLexeme += errorLexeme.ReceivedLexeme;
-            ErrorLexeme.EndIndex = errorLexeme.EndIndex;
-            ErrorLexeme.PartToDismiss += errorLexeme.PartToDismiss;
+            UpdateError(errorLexeme); 
         }
+    }
+
+    private void UpdateError(ParsingError lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.ReceivedLexeme;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.PartToDismiss;
     }
 }

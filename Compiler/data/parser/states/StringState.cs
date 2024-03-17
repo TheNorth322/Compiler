@@ -38,12 +38,16 @@ public class StringState : IState
     private void RememberLexeme(Lexeme lexeme)
     {
         if (ErrorLexeme == null)
-            ErrorLexeme = new ParsingError("string", lexeme.Text, lexeme.StartIndex, lexeme.EndIndex, lexeme.Text);
+            ErrorLexeme = new ParsingError("string", lexeme.Text, lexeme.StartIndex, lexeme.EndIndex, lexeme.Text,
+                false);
         else
-        {
-            ErrorLexeme.ReceivedLexeme += lexeme.Text;
-            ErrorLexeme.EndIndex = lexeme.EndIndex;
-            ErrorLexeme.PartToDismiss += lexeme.Text;
-        }
+            UpdateError(lexeme);
+    }
+
+    private void UpdateError(Lexeme lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.Text;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.Text;
     }
 }

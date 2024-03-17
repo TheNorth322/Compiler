@@ -10,6 +10,7 @@ public class IdState : IState
     private IParser _parser;
     public ParsingError? ErrorLexeme { get; set; }
 
+    private const string ExpectedValue = "identifier";
     public IdState(IParser parser)
     {
         _parser = parser;
@@ -19,8 +20,8 @@ public class IdState : IState
     {
         if (lexeme.Type != LexemeType.Identifier)
         {
-           RememberLexeme(lexeme);
-           return false;
+            RememberLexeme(lexeme);
+            return false;
         }
         else
         {
@@ -38,12 +39,15 @@ public class IdState : IState
     private void RememberLexeme(Lexeme lexeme)
     {
         if (ErrorLexeme == null)
-            ErrorLexeme = new ParsingError("ID", lexeme.Text, lexeme.StartIndex, lexeme.EndIndex, lexeme.Text);
+            ErrorLexeme = new ParsingError("ID", lexeme.Text, lexeme.StartIndex, lexeme.EndIndex, lexeme.Text, false);
         else
-        {
-            ErrorLexeme.ReceivedLexeme += lexeme.Text;
-            ErrorLexeme.EndIndex = lexeme.EndIndex;
-            ErrorLexeme.PartToDismiss += lexeme.Text;
-        }
+            UpdateError(lexeme); 
+    }
+
+    private void UpdateError(Lexeme lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.Text;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.Text;
     }
 }

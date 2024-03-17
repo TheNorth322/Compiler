@@ -123,6 +123,14 @@
       <Content Include="references\grammar-classification-ru-RU.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="references\code-en-US.html" />
+      <Content Include="references\code-en-US.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\code-ru-RU.html" />
+      <Content Include="references\code-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

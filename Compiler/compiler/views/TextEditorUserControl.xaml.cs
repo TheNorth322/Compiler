@@ -42,7 +42,7 @@ public partial class TextEditorUserControl : UserControl
     {
         if (count == 0)
         {
-            ErrorsCounterIcon.Kind = PackIconKind.CheckboxMarkedCircle;
+            ErrorsCounterIcon.Kind = PackIconKind.CheckboxMarkedCircleOutline;
             ErrorsCounterIcon.Visibility = Visibility.Visible;
         }
         else
@@ -179,6 +179,7 @@ public partial class TextEditorUserControl : UserControl
     private void TextEditor_OnTextChanged(object? sender, EventArgs e)
     {
         if (!this.IsLoaded) return;
+        if (DataContext == null) return;
         ((this.DataContext as TextEditorViewModel)!).FileContents = textEditor.Text;
         if (((this.DataContext as TextEditorViewModel)!).Saved)
             ((this.DataContext as TextEditorViewModel)!).FileUnsaved();

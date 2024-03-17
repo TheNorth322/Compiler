@@ -16,7 +16,7 @@ public class Parser : IParser
     private List<ParsingError> _errorLexemes;
     private List<IState> _states;
     private int _currentState;
-
+    
     public Parser(ILexer lexer)
     {
         this.Lexer = lexer;
@@ -59,12 +59,12 @@ public class Parser : IParser
             string rightPart = lexeme.Text.Substring(end);
 
             return new ParsingError(expectedValue, lexeme.Text, lexeme.StartIndex, lexeme.StartIndex + end,
-                $"{leftPart} {rightPart}");
+                $"{leftPart} {rightPart}", true);
         }
         else
         {
             return new ParsingError(expectedValue, lexeme.Text, lexeme.StartIndex, lexeme.EndIndex,
-                $"{lexeme.Text}");
+                $"{lexeme.Text}", false);
         }
     }
 
@@ -83,10 +83,12 @@ public class Parser : IParser
             
             // Try to parse lexeme
             bool lexemeFound = _states[_currentState].Parse(lexeme);
-
+            
             // Check if there is an error after parsing this lexeme
             if (!lexemeFound)
+            {
                 IronsMethod(lexemes, ref i);
+            }
         }
 
         CheckError();
@@ -96,7 +98,7 @@ public class Parser : IParser
     private void IronsMethod(List<Lexeme> lexemes, ref int currentIndex)
     {
         int nextState = _currentState;
-
+              
         while (_states[nextState].ErrorLexeme != null && currentIndex < lexemes.Count - 1)
         {
             // Move to the next lexeme
@@ -108,9 +110,7 @@ public class Parser : IParser
 
             // If no error found, update the state and exit the loop
             if (result)
-            {
                 break;
-            }
         }
     }
 

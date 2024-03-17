@@ -13,4 +13,6 @@ public interface ITextRepository
     void CallLiterature(string localization);
 
     void CallGrammarClassification(string localization);
+
+    void CallSourceCode(string localization);
 }

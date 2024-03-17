@@ -45,7 +45,7 @@
     <system:String x:Key="LexemeTypeHeader">Тип</system:String>
     <system:String x:Key="LexemeHeader">Лексема</system:String>
 
-    <system:String x:Key="ErrorsHeader">Ошибки</system:String>
+    <system:String x:Key="ErrorsHeader">Парсер</system:String>
     <system:String x:Key="AnalyzerHeader">Анализатор</system:String>
 
     <system:String x:Key="LexemeCodeHeader">Код лексемы</system:String>

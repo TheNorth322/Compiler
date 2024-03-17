@@ -1,3 +1,1 @@
-﻿Const Stroka: string = 'Привет';
-Const Number: integer = 42;
-Const Flag: boolean = true;
+﻿Const Stroka:string='Привет';

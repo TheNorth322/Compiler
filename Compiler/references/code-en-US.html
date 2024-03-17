@@ -1,0 +1,482 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source code</title>
+    <style>
+        code {
+            background-color: #f4f4f4;
+            padding: 10px;
+            display: block;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<h1>Source code</h1>
+<h2>Parser.cs</h2>
+<code>
+        <pre>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Compiler.data.lexer.Interface;
+using Compiler.data.parser.Interface;
+using Compiler.data.parser.states;
+using Compiler.domain.entity;
+using Compiler.domain.enums;
+using Compiler.utils;
+
+namespace Compiler.data.parser;
+
+public class Parser : IParser
+{
+    public ILexer Lexer { get; }
+    private List&lt;ParsingError&gt; _errorLexemes;
+    private List&lt;IState&gt; _states;
+    private int _currentState;
+    
+    public Parser(ILexer lexer)
+    {
+        this.Lexer = lexer;
+        _errorLexemes = new List&lt;ParsingError&gt;();
+        _states = new List&lt;IState&gt;();
+
+        _states.Add(new ConstState(this));
+        _states.Add(new IdSpaceState(this));
+        _states.Add(new IdState(this));
+        _states.Add(new TypeAssignState(this));
+        _states.Add(new TypeState(this));
+        _states.Add(new AssignState(this));
+        _states.Add(new StringBeginState(this));
+        _states.Add(new StringState(this));
+        _states.Add(new StringEndState(this));
+        _states.Add(new EndExpressionState(this));
+    }
+
+    public void MoveState()
+    {
+        _currentState = (_states.Count - 1 == _currentState)
+            ? 0
+            : _currentState + 1;
+    }
+
+    public void AddErrorLexeme(ParsingError lexeme)
+    {
+        _errorLexemes.Add(lexeme);
+    }
+
+    public ParsingError FindLexeme(Lexeme lexeme, LexemeType expectedType, string expectedValue)
+    {
+        int index = lexeme.Text.IndexOf(expectedValue, StringCompari-son.Ordinal);
+        if (index != -1)
+        {
+            int start = index;
+            int end = start + expectedValue.Length;
+
+            string leftPart = lexeme.Text.Substring(0, start);
+            string rightPart = lexeme.Text.Substring(end);
+
+            return new ParsingError(expectedValue, lexeme.Text, lex-eme.StartIndex, lexeme.StartIndex + end,
+                $"{leftPart} {rightPart}", true);
+        }
+        else
+        {
+            return new ParsingError(expectedValue, lexeme.Text, lex-eme.StartIndex, lexeme.EndIndex,
+                $"{lexeme.Text}", false);
+        }
+    }
+
+
+    public List&lt;ParsingError&gt; Parse(string input)
+    {
+        List&lt;Lexeme&gt; lexemes = Lexer.Analyze(input);
+
+        _errorLexemes.Clear();
+        _currentState = 0;
+
+        // Iterate through lexemes
+        for (int i = 0; i < lexemes.Count; i++)
+        {
+            Lexeme lexeme = lexemes[i];
+            
+            // Try to parse lexeme
+            bool lexemeFound = _states[_currentState].Parse(lexeme);
+            
+            // Check if there is an error after parsing this lexeme
+            if (!lexemeFound)
+            {
+                IronsMethod(lexemes, ref i);
+            }
+        }
+
+        CheckError();
+        return _errorLexemes;
+    }
+
+    private void IronsMethod(List&lt;Lexeme&gt; lexemes, ref int currentIndex)
+    {
+        int nextState = _currentState;
+              
+        while (_states[nextState].ErrorLexeme != null && currentIndex < lex-emes.Count - 1)
+        {
+            // Move to the next lexeme
+            currentIndex++;
+            Lexeme nextLexeme = lexemes[currentIndex];
+
+            // Try to parse the lexeme with the current state
+            bool result = _states[nextState].Parse(nextLexeme);
+
+            // If no error found, update the state and exit the loop
+            if (result)
+                break;
+        }
+    }
+
+    private void CheckError()
+    {
+        if (_states[_currentState].ErrorLexeme != null)
+        {
+            this.AddErrorLexeme(_states[_currentState].ErrorLexeme);
+            _states[_currentState].ErrorLexeme = null;
+        }
+    }
+}
+
+        </pre>
+</code>
+<h2>ConstState.cs</h2>
+<code>
+        <pre>
+using Compiler.data.parser.Interface;
+using Compiler.domain.entity;
+using Compiler.domain.enums;
+using Compiler.utils;
+
+namespace Compiler.data.parser.states;
+
+public class ConstState : IState
+{
+    private IParser _parser;
+
+    public ParsingError? ErrorLexeme { get; set; }
+
+    private const string ExpectedLexeme = "Const";
+
+    public ConstState(IParser parser)
+    {
+        _parser = parser;
+    }
+
+    public bool Parse(Lexeme lexeme)
+    {
+        if (lexeme.Type != LexemeType.Const)
+        {
+            // Try to find expected lexeme in received (CConstt -> C Const t)
+            ParsingError errorLexeme = _parser.FindLexeme(lexeme, Lex-emeType.Const, ExpectedLexeme);
+
+            RememberLexeme(errorLexeme);
+            CheckExpectedInReceived(errorLexeme);
+
+            return false;
+        }
+        else
+        {
+            if (ErrorLexeme != null)
+            {
+                AddLexeme();
+                return true;
+            }
+
+            _parser.MoveState();
+            return true;
+        }
+    }
+
+    private void CheckExpectedInReceived(ParsingError parsingError)
+    {
+        // If expected value found in received. Add parsing error and move state
+        if (parsingError.IsExpectedInReceived)
+            AddLexeme();
+    }
+
+    private void AddLexeme()
+    {
+        _parser.AddErrorLexeme(ErrorLexeme);
+        ErrorLexeme = null;
+        _parser.MoveState();
+    }
+
+    private void RememberLexeme(ParsingError errorLexeme)
+    {
+        if (ErrorLexeme == null)
+            ErrorLexeme = errorLexeme;
+        // if previous and this one do not have expected value inside
+        else
+        {
+            UpdateError(errorLexeme);
+        }
+    }
+
+    private void UpdateError(ParsingError lexeme)
+    {
+        ErrorLexeme.ReceivedLexeme += lexeme.ReceivedLexeme;
+        ErrorLexeme.EndIndex = lexeme.EndIndex;
+        ErrorLexeme.PartToDismiss += lexeme.PartToDismiss;
+    }
+}
+        </pre>
+</code>
+<h2>IdState.cs</h2>
+<code><pre>
+using Compiler.data.parser.Interface;
+using Compiler.domain.entity;
+using Compiler.domain.enums;
+using Compiler.utils;
+
+namespace Compiler.data.parser.states;
+
+public class IdState : IState
+{
+private IParser _parser;
+public ParsingError? ErrorLexeme { get; set; }
+
+private const string ExpectedValue = "identifier";
+public IdState(IParser parser)
+{
+_parser = parser;
+}
+
+public bool Parse(Lexeme lexeme)
+{
+if (lexeme.Type != LexemeType.Identifier)
+{
+RememberLexeme(lexeme);
+return false;
+}
+else
+{
+if (ErrorLexeme != null)
+{
+_parser.AddErrorLexeme(ErrorLexeme);
+ErrorLexeme = null;
+}
+
+_parser.MoveState();
+return true;
+}
+}
+
+private void RememberLexeme(Lexeme lexeme)
+{
+if (ErrorLexeme == null)
+ErrorLexeme = new ParsingError("ID", lexeme.Text, lex-eme.StartIndex, lexeme.EndIndex, lexeme.Text, false);
+else
+UpdateError(lexeme);
+}
+
+private void UpdateError(Lexeme lexeme)
+{
+ErrorLexeme.ReceivedLexeme += lexeme.Text;
+ErrorLexeme.EndIndex = lexeme.EndIndex;
+ErrorLexeme.PartToDismiss += lexeme.Text;
+}
+}
+</pre></code>
+<h2>StringLexer.cs</h2>
+<code><pre>
+using System.Collections.Generic;
+using Compiler.domain.entity;
+using Compiler.domain.enums;
+
+namespace Compiler.data.lexer.Interface;
+
+public class StringLexer : ILexer
+{
+    public List&lt;Lexeme&gt; Analyze(string input)
+    {
+        List&lt;Lexeme&gt; lexemes = new List&lt;Lexeme&gt;();
+
+        int currentIndex = 0;
+        string lexeme = "";
+
+        // Iterate through input string
+        while (currentIndex < input.Length)
+        {
+            lexeme = $"{input[currentIndex]}";
+
+            // Keywords
+            if (char.IsLetter(input[currentIndex]))
+            {
+                int startIndex = currentIndex;
+
+                // Build lexeme until special symbol or separator
+                while ((char.IsLetterOrDigit(input[currentIndex + 1]) || input[currentIndex + 1] == '_') &&
+                       (currentIndex + 1) < input.Length)
+                {
+                    currentIndex++;
+                    lexeme += input[currentIndex];
+                }
+
+                LexemeType type = GetKeywordType(lexeme);
+                lexemes.Add(new Lexeme(type, lexeme, startIndex, currentIndex++));
+            }
+            // Constant strings
+            else if (input[currentIndex] == '\'')
+            {
+                lexemes.Add(new Lexeme(LexemeType.StringSeparator, lexeme, currentIndex, currentIndex));
+                lexeme = "";
+                
+                int startIndex = currentIndex + 1;
+                // Build lexeme until special symbol or separator
+                while ((currentIndex + 1) < input.Length && input[currentIndex + 1] != '\'')
+                {
+                    currentIndex++;
+                    lexeme += input[currentIndex];
+                }
+
+                lexemes.Add(new Lexeme(LexemeType.StringConstant, lexeme, startIndex, currentIndex));
+
+                if ((currentIndex + 1) < input.Length && input[currentIndex + 1] == '\'')
+                {
+                    lexeme = $"{input[currentIndex + 1]}";
+                    lexemes.Add(new Lexeme(LexemeType.StringSeparator, lexeme, currentIndex + 1, currentIndex + 1));
+                    currentIndex += 2;
+                }
+                    
+            }
+            else if (input[currentIndex] == '\r' || input[currentIndex] == '\n')
+            {
+                currentIndex++;
+            } 
+            // Special symbols (:, =, ;, whitespace, \t)
+            else
+            {
+                LexemeType symbolType = GetSymbolType(input[currentIndex]);
+                lexemes.Add(new Lexeme(symbolType, lexeme, currentIndex, currentIndex));
+                currentIndex++;
+            }
+        }
+
+        return lexemes;
+    }
+
+    private LexemeType GetSymbolType(char symbol)
+    {
+        switch (symbol)
+        {
+            case ':':
+                return LexemeType.TypeAssignmentOperator;
+            case '=':
+                return LexemeType.AssignmentOperator;
+            case ';':
+                return LexemeType.EndOfStatement;
+            case ' ':
+                return LexemeType.Separator;
+            case '\'':
+                return LexemeType.StringSeparator;
+            case '\t':
+                return LexemeType.Tabulation;
+            case '\n':
+                return LexemeType.LineBreak;
+            default:
+                return LexemeType.Invalid;
+        }
+    }
+
+    private LexemeType GetKeywordType(string lexeme)
+    {
+        switch (lexeme)
+        {
+            case "Const":
+                return LexemeType.Const;
+            case "string":
+                return LexemeType.String;
+            default:
+                return LexemeType.Identifier;
+        }
+    }
+}
+</pre></code>
+<h2>Lexeme.cs</h2>
+<code><pre>
+        using Compiler.domain.enums;
+
+        namespace Compiler.domain.entity;
+
+        public struct Lexeme
+        {
+        public LexemeType Type;
+        public string Text;
+        public int StartIndex;
+        public int EndIndex;
+
+        public Lexeme(LexemeType type, string text, int startIndex, int endIndex)
+        {
+        Type = type;
+        Text = text;
+        StartIndex = startIndex;
+        EndIndex = endIndex;
+        }
+        }
+        </pre></code>
+<h2>ParsingError.cs</h2>
+<code><pre>
+        using Compiler.utils;
+
+        namespace Compiler.domain.entity;
+
+        public class ParsingError
+        {
+        public ParsingError(string expectedLexeme, string receivedLexeme, int startIndex, int endIndex, string partToDismiss, bool isExpectedInReceived)
+        {
+        ExpectedLexeme = expectedLexeme;
+        ReceivedLexeme = receivedLexeme;
+        StartIndex = startIndex;
+        EndIndex = endIndex;
+        PartToDismiss = partToDismiss;
+        IsExpectedInReceived = isExpectedInReceived;
+        }
+
+        public string ExpectedLexeme { get; set; }
+
+        public string ReceivedLexeme { get; set; }
+
+        public int StartIndex { get; set; }
+
+        public int EndIndex { get; set; }
+        public string PartToDismiss { get; set; }
+
+        public bool IsExpectedInReceived { get; set; }
+        }
+        </pre></code>
+<h2>LexemeType.cs</h2>
+<code>
+            <pre>
+        namespace Compiler.domain.enums;
+
+        public enum LexemeType
+        {
+        Const = 1,
+        String = 2,
+        Integer = 3,
+        Boolean = 4,
+        True = 5,
+        False = 6,
+        Identifier = 7,
+        Separator = 8,
+        LineBreak = 9,
+        Tabulation = 10,
+        TypeAssignmentOperator = 11,
+        AssignmentOperator = 12,
+        StringConstant = 13,
+        StringSeparator = 14,
+        UnsignedInteger = 15,
+        EndOfStatement = 16,
+        Invalid = 17
+        }
+    </pre>
+</code>
+</body>
+</html>
