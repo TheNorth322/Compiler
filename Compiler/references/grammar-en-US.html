@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Development</title>
+</head>
+<body>
+<h1>Grammar Development</h1>
+<h2>Grammar Definition</h2>
+<p>Let's define the grammar of string constants in the Pascal language G[‹SC›] in Chomsky notation with productions P:</p>
+<ol>
+    <li>‹SC› → “Const”‹IdSpace›</li>
+    <li>‹IdSpace› → “ “‹Id›</li>
+    <li>‹Id› → ‹Letter›{‹Letter›|‹Digit›|“_”}‹TypeAssign›</li>
+    <li>‹TypeAssign› → “:”‹Type›</li>
+    <li>‹Type› → “string”‹Assign›</li>
+    <li>‹Assign› → “=”‹StringBegin›</li>
+    <li>‹StringBegin› → “’”‹String›</li>
+    <li>‹String› → {‹Letter›|‹Digit›}|‹StringEnd›</li>
+    <li>‹StringEnd› → “’”‹EndExpr›</li>
+    <li>‹EndExpr› → “;”</li>
+</ol>
+<p>Following the introduced formal definition of the grammar, let's represent G[‹SC›] by its components:</p>
+<ul>
+    <li>Z = ‹SC›;</li>
+    <li>V<sub>T</sub> = {“Const”, “string”, “a”…”z”, “A”…”Z”, “0”...”9”, “:”, “=”, “;”, “_”, “’”, “ “};</li>
+    <li>V<sub>N</sub> = {‹SC›, ‹IdSpace›, ‹Id›, ‹TypeAssign›, ‹Type›, ‹Assign›, ‹StringBegin›, ‹String›, ‹StringEnd›, ‹EndExpr›, ‹Digit›, ‹Letter›}.</li>
+</ul>
+</body>
+</html>

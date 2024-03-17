@@ -44,13 +44,13 @@
             </MenuItem>
 
             <MenuItem Header="{DynamicResource TextHeader}">
-                <MenuItem Command="{Binding}" Header="{DynamicResource TaskHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource GrammarHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource GrammarClassificationHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource AnalyzationMethodHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource DiagnosisHeader}" />
+                <MenuItem Command="{Binding CallTaskCommand}" Header="{DynamicResource TaskHeader}" />
+                <MenuItem Command="{Binding CallGrammarCommand}" Header="{DynamicResource GrammarHeader}" />
+                <MenuItem Command="{Binding CallGrammarClassificationCommand}" Header="{DynamicResource GrammarClassificationHeader}" />
+                <MenuItem Command="{Binding CallAnalysisMethodCommand}" Header="{DynamicResource AnalyzationMethodHeader}" />
+                <MenuItem Command="{Binding CallDiagnosisCommand}" Header="{DynamicResource DiagnosisHeader}" />
                 <MenuItem Command="{Binding OpenExampleCommand}" Header="{DynamicResource ExampleHeader}" />
-                <MenuItem Command="{Binding}" Header="{DynamicResource BooksHeader}" />
+                <MenuItem Command="{Binding CallLiteratureCommand}" Header="{DynamicResource BooksHeader}" />
                 <MenuItem Command="{Binding}" Header="{DynamicResource SourceCodeHeader}" />
             </MenuItem>
 

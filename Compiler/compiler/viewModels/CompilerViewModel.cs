@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Compiler.domain.useCases;
 using Compiler.utils;
+using Microsoft.Xaml.Behaviors.Core;
 using FileInfo = Compiler.domain.entity.FileInfo;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -42,8 +43,18 @@ public class CompilerViewModel : ViewModelBase
     public ICommand SaveCommand { get; }
     public ICommand CallProgramDescriptionCommand { get; }
 
+    public ICommand CallTaskCommand { get; }
+
+    public ICommand CallGrammarCommand { get; }
+
+    public ICommand CallAnalysisMethodCommand { get; }
+
+    public ICommand CallLiteratureCommand { get; }
+    public ICommand CallGrammarClassificationCommand { get; }
+
     public ICommand StartAnalyzationCommand { get; }
 
+    public ICommand CallDiagnosisCommand { get; }
     public Action ExitButtonClicked { get; set; }
     public EventHandler<string> ChangeLanguageAction { get; set; }
     public Action ShowWantToSaveMessageBox { get; set; }
@@ -68,6 +79,12 @@ public class CompilerViewModel : ViewModelBase
         CallProgramDescriptionCommand = new RelayCommand<object>(CallProgramDescription);
         StartAnalyzationCommand = new RelayCommand<object>(StartAnalyzationExecute);
         OpenExampleCommand = new RelayCommand<object>(OpenExampleExecute);
+        CallTaskCommand = new RelayCommand<object>(CallTaskExecute);
+        CallGrammarCommand = new RelayCommand<object>(CallGrammarExecute);
+        CallAnalysisMethodCommand = new RelayCommand<object>(CallAnalysisMethodExecute);
+        CallDiagnosisCommand = new RelayCommand<object>(CallDiagnosisExecute);
+        CallLiteratureCommand = new RelayCommand<object>(CallLiteratureExecute);
+        CallGrammarClassificationCommand = new RelayCommand<object>(CallGrammarClassificationExecute);
 
         _fileUseCase = fileUseCase;
         _textUseCase = textUseCase;
@@ -352,7 +369,97 @@ public class CompilerViewModel : ViewModelBase
         try
         {
             string path = "example/example.txt";
-            OpenFile(path); 
+            OpenFile(path);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallTaskExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallTask(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallGrammarExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallGrammar(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallAnalysisMethodExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallAnalysisMethod(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallDiagnosisExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallNeutralization(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallLiteratureExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallLiterature(_localizationProvider.CurrentLocalizationCode);
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void CallGrammarClassificationExecute(object obj)
+    {
+        try
+        {
+            _textUseCase.CallGrammarClassification(_localizationProvider.CurrentLocalizationCode);
         }
         catch (Exception ex)
         {

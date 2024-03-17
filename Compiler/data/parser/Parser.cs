@@ -15,7 +15,6 @@ public class Parser : IParser
     public ILexer Lexer { get; }
     private List<ParsingError> _errorLexemes;
     private List<IState> _states;
-    private LocalizationProvider _localizationProvider;
     private int _currentState;
 
     public Parser(ILexer lexer)
@@ -23,8 +22,6 @@ public class Parser : IParser
         this.Lexer = lexer;
         _errorLexemes = new List<ParsingError>();
         _states = new List<IState>();
-
-        _localizationProvider = LocalizationProvider.Instance;
 
         _states.Add(new ConstState(this));
         _states.Add(new IdSpaceState(this));
@@ -79,24 +76,20 @@ public class Parser : IParser
         _errorLexemes.Clear();
         _currentState = 0;
 
+        // Iterate through lexemes
         for (int i = 0; i < lexemes.Count; i++)
         {
             Lexeme lexeme = lexemes[i];
+            
+            // Try to parse lexeme
             bool lexemeFound = _states[_currentState].Parse(lexeme);
 
             // Check if there is an error after parsing this lexeme
             if (!lexemeFound)
-            {
                 IronsMethod(lexemes, ref i);
-            }
         }
 
-        if (_states[_currentState].ErrorLexeme != null)
-        {
-            this.AddErrorLexeme(_states[_currentState].ErrorLexeme);
-            _states[_currentState].ErrorLexeme = null;
-        }
-
+        CheckError();
         return _errorLexemes;
     }
 
@@ -121,4 +114,12 @@ public class Parser : IParser
         }
     }
 
+    private void CheckError()
+    {
+        if (_states[_currentState].ErrorLexeme != null)
+        {
+            this.AddErrorLexeme(_states[_currentState].ErrorLexeme);
+            _states[_currentState].ErrorLexeme = null;
+        }
+    }
 }

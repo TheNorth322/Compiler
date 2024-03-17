@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Classification</title>
+</head>
+<body>
+<h1>Grammar Classification</h1>
+<p>According to Chomsky's classification, grammar G[‹SC›] is automaton.</p>
+<p>Rules (1)-(9) belong to the class of right-recursive productions (A → aB | a | ε):</p>
+<ol>
+    <li>‹SC› → “Const”‹IdSpace›</li>
+    <li>‹IdSpace› → “ “‹Id›</li>
+    <li>‹Id› → ‹Letter›{‹Letter›|‹Digit›|“_”}‹TypeAssign›</li>
+    <li>‹TypeAssign› → “:”‹Type›</li>
+    <li>‹Type› → “string”‹Assign›</li>
+    <li>‹Assign› → “=”‹StringBegin›</li>
+    <li>‹StringBegin› → “’”‹String›</li>
+    <li>‹String› → {‹Letter›|‹Digit›}|‹StringEnd›</li>
+    <li>‹StringEnd› → “’”‹EndExpr›</li>
+</ol>
+<p>Note that rules must be either all left-recursive or all right-recursive. A combination of both is not allowed.</p>
+</body>
+</html>

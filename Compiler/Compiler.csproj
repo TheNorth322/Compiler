@@ -63,6 +63,70 @@
       <Content Include="references\reference-ru-RU.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="references\task-ru-RU.html" />
+      <Content Include="references\task-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\task-en-US.html" />
+      <Content Include="references\task-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\grammar-ru-RU.html" />
+      <Content Include="references\grammar-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\grammar-en-US.html" />
+      <Content Include="references\grammar-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="images\graph.jpg" />
+      <Content Include="images\graph.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\analysis-method-en-US.html" />
+      <Content Include="references\analysis-method-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\analysis-method-ru-RU.html" />
+      <Content Include="references\analysis-method-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\neutralization-en-US.html" />
+      <Content Include="references\neutralization-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\neutralization-ru-RU.html" />
+      <Content Include="references\neutralization-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="images\structure.jpg" />
+      <Content Include="images\structure.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="images\unbuild.jpg" />
+      <Content Include="images\unbuild.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\literature-en-US.html" />
+      <Content Include="references\literature-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\literature-ru-RU.html" />
+      <Content Include="references\literature-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\grammar-classification-en-US.html" />
+      <Content Include="references\grammar-classification-en-US.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="references\grammar-classification-ru-RU.html" />
+      <Content Include="references\grammar-classification-ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="images" />
     </ItemGroup>
 
 </Project>

@@ -22,9 +22,9 @@ public class ConstState : IState
     {
         if (lexeme.Type != LexemeType.Const)
         {
-            // Try to find expected lexeme in received
+            // Try to find expected lexeme in received (CConstt -> C Const t)
             ParsingError errorLexeme = _parser.FindLexeme(lexeme, LexemeType.Const, ExpectedLexeme);
-
+             
             RememberLexeme(errorLexeme);
             CheckExpectedInReceived(errorLexeme);
 
@@ -45,7 +45,7 @@ public class ConstState : IState
 
     private void CheckExpectedInReceived(ParsingError parsingError)
     {
-        // If expected value found in received
+        // If expected value found in received. Add parsing error and move state
         if (parsingError.ReceivedLexeme != parsingError.PartToDismiss)
             AddLexeme();
     }
@@ -61,6 +61,7 @@ public class ConstState : IState
     {
         if (ErrorLexeme == null)
             ErrorLexeme = errorLexeme;
+        // if previous and this one do not have expected value inside
         else
         {
             ErrorLexeme.ReceivedLexeme += errorLexeme.ReceivedLexeme;

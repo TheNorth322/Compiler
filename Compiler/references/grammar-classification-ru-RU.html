@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация грамматики</title>
+</head>
+<body>
+<h1>Классификация грамматики</h1>
+<p>Согласно классификации Хомского, грамматика G[‹SC›] является автоматной.</p>
+<p>Правила (1)-(9) относятся к классу праворекурсивных продукций (A → aB | a | ε):</p>
+<ol>
+    <li>‹SC› → “Const”‹IdSpace›</li>
+    <li>‹IdSpace› → “ “‹Id›</li>
+    <li>‹Id› → ‹Letter›{‹Letter›|‹Digit›|“_”}‹TypeAssign›</li>
+    <li>‹TypeAssign› → “:”‹Type›</li>
+    <li>‹Type› → “string”‹Assign›</li>
+    <li>‹Assign› → “=”‹StringBegin›</li>
+    <li>‹StringBegin› → “’”‹String›</li>
+    <li>‹String› → {‹Letter›|‹Digit›}|‹StringEnd›</li>
+    <li>‹StringEnd› → “’”‹EndExpr›</li>
+</ol>
+<p>Отметим, что правила должны быть либо только леворекурсивными, либо только праворекурсивными. Комбинация тех и других
+    не допускается.</p>
+</body>
+</html>

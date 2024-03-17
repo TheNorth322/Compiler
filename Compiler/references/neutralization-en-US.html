@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax Error Diagnosis and Neutralization</title>
+</head>
+<body>
+<h1>Syntax Error Diagnosis and Neutralization</h1>
+<h2>Iron's Method</h2>
+<p>The essence of Iron's method is as follows:</p>
+<p>When an error is detected (a symbol is encountered in the input stream during parsing that does not correspond to any
+    of the expected symbols), the input string of symbols looks as follows: Tt, where T is the next symbol in the input
+    stream (erroneous symbol), t is the remaining string of symbols in the input stream after T. The neutralization
+    algorithm consists of the following steps:</p>
+<ol>
+    <li>Unfinished parse trees are determined;</li>
+    <li>The set L is formed - the set of residual symbols of unfinished parse trees;</li>
+    <li>The next symbol is removed from the input string until the string takes the form Tt, such that U => T, where U ∈
+        L, i.e., until the next symbol in the string T cannot be derived from any of the residual symbols of unfinished
+        parse trees.
+    </li>
+    <li>It is determined which of the unfinished parse trees caused the appearance of symbol U in set L (in other words,
+        which part of which unfinished parse tree is symbol U).
+    </li>
+</ol>
+<h3>Iron's Method for Finite-State Grammar</h3>
+<p>The developing syntax analyzer is built on the basis of finite-state grammar. The implementation of the Iron's
+    algorithm for finite-state grammar has the following feature.</p>
+<p>The parse tree using finite-state grammar is represented in Figure 2.</p>
+<img src="../images/structure.jpg" alt="Figure 2"/>
+<p>Figure 2 – Structure of the parse tree for finite-state grammar</p>
+<p>Thus, when a syntax error occurs during parsing using finite-state grammar, there will always be only one unfinished
+    parse tree in the parse tree (see Figure 3).</p>
+<img src="../images/unbuild.jpg" alt="Figure 3"/>
+<p>Figure 3 – Unfinished parse tree when a syntax error occurs (highlighted with dashed lines)</p>
+<p>Since the only unfinished parse tree is the one that caused the syntax error during its construction, it is the only
+    parse tree to which the remaining input string of symbols can be attached.</p>
+<p>It is proposed to reduce the neutralization algorithm to sequentially deleting the next symbol in the input string
+    until the next symbol is one of the permissible ones at the moment of parsing.</p>
+</body>
+</html>
