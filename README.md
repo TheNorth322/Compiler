@@ -144,5 +144,8 @@ P:
 ![Граф конечного автомати (2)](https://github.com/TheNorth322/Compiler/assets/70006380/4a64ffee-d5af-4880-8adf-7337c2a8ce96)
 
 ## Тестовые примеры
+1. Пример №1
+   ![image](https://github.com/TheNorth322/Compiler/assets/70006380/1aa3cc1e-2c58-4838-b7a2-becc073811e9)
+
 
 
