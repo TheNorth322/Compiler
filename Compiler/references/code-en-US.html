@@ -18,129 +18,100 @@
 <h2>Parser.cs</h2>
 <code>
         <pre>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Compiler.data.lexer.Interface;
-using Compiler.data.parser.Interface;
-using Compiler.data.parser.states;
-using Compiler.domain.entity;
-using Compiler.domain.enums;
-using Compiler.utils;
-
-namespace Compiler.data.parser;
-
 public class Parser : IParser
 {
-    public ILexer Lexer { get; }
-    private List&lt;ParsingError&gt; _errorLexemes;
     private List&lt;IState&gt; _states;
-    private int _currentState;
-    
-    public Parser(ILexer lexer)
+    private int _currentStateIndex;
+
+    public Parser()
     {
-        this.Lexer = lexer;
-        _errorLexemes = new List&lt;ParsingError&gt;();
         _states = new List&lt;IState&gt;();
 
         _states.Add(new ConstState(this));
         _states.Add(new IdSpaceState(this));
         _states.Add(new IdState(this));
-        _states.Add(new TypeAssignState(this));
+        _states.Add(new TypeAssignmentState(this));
         _states.Add(new TypeState(this));
-        _states.Add(new AssignState(this));
+        _states.Add(new AssignmentState(this));
         _states.Add(new StringBeginState(this));
         _states.Add(new StringState(this));
         _states.Add(new StringEndState(this));
         _states.Add(new EndExpressionState(this));
     }
 
-    public void MoveState()
-    {
-        _currentState = (_states.Count - 1 == _currentState)
-            ? 0
-            : _currentState + 1;
-    }
-
-    public void AddErrorLexeme(ParsingError lexeme)
-    {
-        _errorLexemes.Add(lexeme);
-    }
-
-    public ParsingError FindLexeme(Lexeme lexeme, LexemeType expectedType, string expectedValue)
-    {
-        int index = lexeme.Text.IndexOf(expectedValue, StringCompari-son.Ordinal);
-        if (index != -1)
-        {
-            int start = index;
-            int end = start + expectedValue.Length;
-
-            string leftPart = lexeme.Text.Substring(0, start);
-            string rightPart = lexeme.Text.Substring(end);
-
-            return new ParsingError(expectedValue, lexeme.Text, lex-eme.StartIndex, lexeme.StartIndex + end,
-                $"{leftPart} {rightPart}", true);
-        }
-        else
-        {
-            return new ParsingError(expectedValue, lexeme.Text, lex-eme.StartIndex, lexeme.EndIndex,
-                $"{lexeme.Text}", false);
-        }
-    }
-
-
     public List&lt;ParsingError&gt; Parse(string input)
     {
-        List&lt;Lexeme&gt; lexemes = Lexer.Analyze(input);
+        _currentStateIndex = 0;
+        List&lt;ParsingError&gt; parsingErrors = new List&lt;ParsingError&gt;();
 
-        _errorLexemes.Clear();
-        _currentState = 0;
-
-        // Iterate through lexemes
-        for (int i = 0; i < lexemes.Count; i++)
+        for (int i = 0; i < input.Length - 1; i++)
         {
-            Lexeme lexeme = lexemes[i];
-            
-            // Try to parse lexeme
-            bool lexemeFound = _states[_currentState].Parse(lexeme);
-            
-            // Check if there is an error after parsing this lexeme
-            if (!lexemeFound)
+            ParsingError? parsingError = _states[_currentStateIndex].Parse(ref i, input);
+            AddParsingError(parsingErrors, parsingError);
+        }
+
+        CheckForUnfinishedString(parsingErrors);
+        return parsingErrors;
+    }
+
+    public void MoveState()
+    {
+        _currentStateIndex = (_currentStateIndex == _states.Count - 1) ? 0 : _currentStateIndex + 1;
+    }
+
+    public string AutoFix(string input)
+    {
+        _currentStateIndex = 0;
+
+        for (int i = 0; i < input.Length - 1; i++)
+        {
+            ParsingError? parsingError = _states[_currentStateIndex].Parse(ref i, input);
+            FixParsingError(ref input, ref i, parsingError);
+        }
+
+        return input;
+    }
+
+    private void FixParsingError(ref string input, ref int i, ParsingError? parsingError)
+    {
+        if (parsingError != null)
+        {
+            for (int j = 0; j < parsingError.Errors.Count; j++)
             {
-                IronsMethod(lexemes, ref i);
+                ErrorFragment fragment = parsingError.Errors[j];
+                int length = fragment.EndIndex - fragment.StartIndex + 1;
+                
+                input = input.Remove(fragment.StartIndex, length);
+                i -= length;
+                
+                FixStartIndex(j, length, parsingError);
             }
         }
-
-        CheckError();
-        return _errorLexemes;
     }
 
-    private void IronsMethod(List&lt;Lexeme&gt; lexemes, ref int currentIndex)
+    private void FixStartIndex(int fragmentErrorIndex, int length, ParsingError? parsingError)
     {
-        int nextState = _currentState;
-              
-        while (_states[nextState].ErrorLexeme != null && currentIndex < lex-emes.Count - 1)
+        fragmentErrorIndex++;
+        for (; fragmentErrorIndex < parsingError.Errors.Count; fragmentErrorIndex++)
         {
-            // Move to the next lexeme
-            currentIndex++;
-            Lexeme nextLexeme = lexemes[currentIndex];
-
-            // Try to parse the lexeme with the current state
-            bool result = _states[nextState].Parse(nextLexeme);
-
-            // If no error found, update the state and exit the loop
-            if (result)
-                break;
+            parsingError.Errors[fragmentErrorIndex].StartIndex -= length;
+            parsingError.Errors[fragmentErrorIndex].EndIndex -= length;
+        } 
+    }
+    
+    private void CheckForUnfinishedString(List&lt;ParsingError&gt; parsingErrors)
+    {
+        if (_currentStateIndex != _states.Count - 1)
+        {
+            parsingErrors.Add(new ParsingError("unfinished string", new List&lt;ErrorFragment&gt;(),
+                ParsingErrorType.UnfinishedString));
         }
     }
 
-    private void CheckError()
+    private void AddParsingError(List&lt;ParsingError&gt; parsingErrors, ParsingError? parsingError)
     {
-        if (_states[_currentState].ErrorLexeme != null)
-        {
-            this.AddErrorLexeme(_states[_currentState].ErrorLexeme);
-            _states[_currentState].ErrorLexeme = null;
-        }
+        if (parsingError != null)
+            parsingErrors.Add(parsingError);
     }
 }
 
@@ -149,139 +120,147 @@ public class Parser : IParser
 <h2>ConstState.cs</h2>
 <code>
         <pre>
-using Compiler.data.parser.Interface;
-using Compiler.domain.entity;
-using Compiler.domain.enums;
-using Compiler.utils;
-
-namespace Compiler.data.parser.states;
-
 public class ConstState : IState
 {
+    private string target = "Const";
+    public List&lt;ErrorFragment&gt; ErrorFragments;
     private IParser _parser;
-
-    public ParsingError? ErrorLexeme { get; set; }
-
-    private const string ExpectedLexeme = "Const";
+    private int _currentLiterIndex;
 
     public ConstState(IParser parser)
     {
         _parser = parser;
+        ErrorFragments = new List&lt;ErrorFragment&gt;();
     }
 
-    public bool Parse(Lexeme lexeme)
+    public ParsingError? Parse(ref int i, string input)
     {
-        if (lexeme.Type != LexemeType.Const)
-        {
-            // Try to find expected lexeme in received (CConstt -> C Const t)
-            ParsingError errorLexeme = _parser.FindLexeme(lexeme, Lex-emeType.Const, ExpectedLexeme);
+        _currentLiterIndex = 0;
+        ErrorFragments = new List&lt;ErrorFragment&gt;();
 
-            RememberLexeme(errorLexeme);
-            CheckExpectedInReceived(errorLexeme);
+        bool foundLexeme = false;
+        bool addNewErrorFragment = true;
 
-            return false;
-        }
-        else
+        for (; i < input.Length; i++)
         {
-            if (ErrorLexeme != null)
+            if (input[i] == target[_currentLiterIndex])
             {
-                AddLexeme();
-                return true;
+                addNewErrorFragment = true;
+                _currentLiterIndex++;
+            }
+            else
+            {
+                AddErrorFragment(input, ref i, ref addNewErrorFragment);
             }
 
-            _parser.MoveState();
-            return true;
+            foundLexeme = CheckIfLexemeFound();
+            if (foundLexeme) break;
         }
+
+        ParsingError? parsingError = (ErrorFragments.Count != 0) ? new ParsingError(target, ErrorFragments, ParsingErrorType.Regular) : null;
+        if (foundLexeme) _parser.MoveState();
+        return parsingError;
     }
 
-    private void CheckExpectedInReceived(ParsingError parsingError)
+    private void AddErrorFragment(string input, ref int i, ref bool addNewErrorFragment)
     {
-        // If expected value found in received. Add parsing error and move state
-        if (parsingError.IsExpectedInReceived)
-            AddLexeme();
-    }
-
-    private void AddLexeme()
-    {
-        _parser.AddErrorLexeme(ErrorLexeme);
-        ErrorLexeme = null;
-        _parser.MoveState();
-    }
-
-    private void RememberLexeme(ParsingError errorLexeme)
-    {
-        if (ErrorLexeme == null)
-            ErrorLexeme = errorLexeme;
-        // if previous and this one do not have expected value inside
+        if (addNewErrorFragment)
+        {
+            addNewErrorFragment = false;
+            ErrorFragments.Add(new ErrorFragment(i, i, $"{input[i]}"));
+        }
         else
         {
-            UpdateError(errorLexeme);
+            ErrorFragments.Last().UpdateFragment(input[i], i);
         }
     }
 
-    private void UpdateError(ParsingError lexeme)
+    private bool CheckIfLexemeFound()
     {
-        ErrorLexeme.ReceivedLexeme += lexeme.ReceivedLexeme;
-        ErrorLexeme.EndIndex = lexeme.EndIndex;
-        ErrorLexeme.PartToDismiss += lexeme.PartToDismiss;
+        return _currentLiterIndex == target.Length;
     }
 }
         </pre>
 </code>
 <h2>IdState.cs</h2>
 <code><pre>
-using Compiler.data.parser.Interface;
-using Compiler.domain.entity;
-using Compiler.domain.enums;
-using Compiler.utils;
-
-namespace Compiler.data.parser.states;
-
 public class IdState : IState
 {
-private IParser _parser;
-public ParsingError? ErrorLexeme { get; set; }
+    private string target = "identifier";
+    public List&ltErrorFragment&gt ErrorFragments;
+    private IParser _parser;
 
-private const string ExpectedValue = "identifier";
-public IdState(IParser parser)
-{
-_parser = parser;
-}
+    public IdState(IParser parser)
+    {
+        _parser = parser;
+        ErrorFragments = new List&lt;ErrorFragment&gt;();
+    }
 
-public bool Parse(Lexeme lexeme)
-{
-if (lexeme.Type != LexemeType.Identifier)
-{
-RememberLexeme(lexeme);
-return false;
-}
-else
-{
-if (ErrorLexeme != null)
-{
-_parser.AddErrorLexeme(ErrorLexeme);
-ErrorLexeme = null;
-}
+    public ParsingError? Parse(ref int i, string input)
+    {
+        int startIndex = i;
+        
+        ErrorFragments = new List&lt;ErrorFragment&gt;();
+        bool addNewErrorFragment = true;
+        bool foundId = false;
 
-_parser.MoveState();
-return true;
-}
-}
+        // Check for digits and symbols in beginning (e.g. 223id, 2;-3id)
+        CheckIncorrectSymbolsAtBeginning(input, ref i, ref addNewErrorFragment);
 
-private void RememberLexeme(Lexeme lexeme)
-{
-if (ErrorLexeme == null)
-ErrorLexeme = new ParsingError("ID", lexeme.Text, lex-eme.StartIndex, lexeme.EndIndex, lexeme.Text, false);
-else
-UpdateError(lexeme);
-}
+        addNewErrorFragment = true;
+        
+        ParseUntilTypeAssignment(input, ref i, ref foundId, ref addNewErrorFragment);
+        
+        // Got to end of string and didn't find ':'
+        if (!foundId)
+        {
+            ErrorFragments.Clear();
+            ErrorFragments.Add(new ErrorFragment(startIndex, input.Length - 1, input.Substring(startIndex)));
+        }
+            
+        ParsingError? parsingError = (ErrorFragments.Count != 0) ? new ParsingError(target, ErrorFragments, ParsingErrorType.Regular) : null;
+        if (foundId) _parser.MoveState();
+        return parsingError;
+    }
 
-private void UpdateError(Lexeme lexeme)
-{
-ErrorLexeme.ReceivedLexeme += lexeme.Text;
-ErrorLexeme.EndIndex = lexeme.EndIndex;
-ErrorLexeme.PartToDismiss += lexeme.Text;
-}
+    private void CheckIncorrectSymbolsAtBeginning(string input, ref int i, ref bool addNewErrorFragment)
+    {
+        while (!char.IsLetter(input[i]) && input[i] != '_')
+        {
+            AddNewErrorFragment(ref addNewErrorFragment, input, i);
+            i++;
+        }
+    }
+
+    private void ParseUntilTypeAssignment(string input, ref int i, ref bool foundId, ref bool addNewErrorFragment)
+    {
+        for (; i < input.Length; i++)
+        {
+            if (input[i] == ':')
+            {
+                foundId = true;
+                i--;
+                break;
+            }
+            else if (!char.IsLetterOrDigit(input[i]) && input[i] != '_')
+                AddNewErrorFragment(ref addNewErrorFragment, input, i);
+            else
+                addNewErrorFragment = true;
+        }
+    }
+
+    private void AddNewErrorFragment(ref bool addNewErrorFragment, string input, int i)
+    {
+        if (addNewErrorFragment)
+        {
+            ErrorFragments.Add(new ErrorFragment(i, i, $"{input[i]}"));
+            addNewErrorFragment = false;
+        }
+        else
+        {
+            ErrorFragments.Last().UpdateFragment(input[i], i);
+        }
+    }
 }
 </pre></code>
 <h2>StringLexer.cs</h2>
@@ -401,82 +380,60 @@ public class StringLexer : ILexer
 </pre></code>
 <h2>Lexeme.cs</h2>
 <code><pre>
-        using Compiler.domain.enums;
+public struct Lexeme
+{
+    public LexemeType Type;
+    public string Text;
+    public int StartIndex;
+    public int EndIndex;
 
-        namespace Compiler.domain.entity;
-
-        public struct Lexeme
-        {
-        public LexemeType Type;
-        public string Text;
-        public int StartIndex;
-        public int EndIndex;
-
-        public Lexeme(LexemeType type, string text, int startIndex, int endIndex)
-        {
+    public Lexeme(LexemeType type, string text, int startIndex, int endIndex)
+    {
         Type = type;
         Text = text;
         StartIndex = startIndex;
         EndIndex = endIndex;
-        }
-        }
-        </pre></code>
+    }
+}
+</pre></code>
 <h2>ParsingError.cs</h2>
 <code><pre>
-        using Compiler.utils;
-
-        namespace Compiler.domain.entity;
-
-        public class ParsingError
-        {
-        public ParsingError(string expectedLexeme, string receivedLexeme, int startIndex, int endIndex, string partToDismiss, bool isExpectedInReceived)
-        {
+public class ParsingError
+{
+    public ParsingError(string expectedLexeme, List&lt;ErrorFragment&gt; errors, ParsingErrorType type)
+    {
         ExpectedLexeme = expectedLexeme;
-        ReceivedLexeme = receivedLexeme;
-        StartIndex = startIndex;
-        EndIndex = endIndex;
-        PartToDismiss = partToDismiss;
-        IsExpectedInReceived = isExpectedInReceived;
-        }
+        Errors = errors;
+        ParsingErrorType = type;
+    }
 
-        public string ExpectedLexeme { get; set; }
-
-        public string ReceivedLexeme { get; set; }
-
-        public int StartIndex { get; set; }
-
-        public int EndIndex { get; set; }
-        public string PartToDismiss { get; set; }
-
-        public bool IsExpectedInReceived { get; set; }
-        }
-        </pre></code>
+    public string ExpectedLexeme { get; set; }
+    public ParsingErrorType ParsingErrorType { get; set; }
+    public List&lt;ErrorFragment&gt; Errors { get; set; }
+}
+</pre></code>
 <h2>LexemeType.cs</h2>
-<code>
-            <pre>
-        namespace Compiler.domain.enums;
-
-        public enum LexemeType
-        {
-        Const = 1,
-        String = 2,
-        Integer = 3,
-        Boolean = 4,
-        True = 5,
-        False = 6,
-        Identifier = 7,
-        Separator = 8,
-        LineBreak = 9,
-        Tabulation = 10,
-        TypeAssignmentOperator = 11,
-        AssignmentOperator = 12,
-        StringConstant = 13,
-        StringSeparator = 14,
-        UnsignedInteger = 15,
-        EndOfStatement = 16,
-        Invalid = 17
-        }
-    </pre>
-</code>
+<code><pre>
+public enum LexemeType
+{
+    Const = 1,
+    String = 2,
+    Integer = 3,
+    Boolean = 4,
+    True = 5,
+    False = 6,
+    Identifier = 7,
+    Separator = 8,
+    LineBreak = 9,
+    Tabulation = 10,
+    TypeAssignmentOperator = 11,
+    AssignmentOperator = 12,
+    StringConstant = 13,
+    StringSeparator = 14,
+    UnsignedInteger = 15,
+    EndOfStatement = 16,
+    Invalid = 17
+}
+</pre></code>
 </body>
 </html>

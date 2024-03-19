@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Compiler.domain.entity;
 using Compiler.domain.useCases;
@@ -28,6 +29,7 @@ public class TextEditorViewModel : ViewModelBase
     private bool _saved;
 
     private TextDocument _textDocument;
+    private ILocalizationProvider _localizationProvider;
     public Action SelectAllButtonClicked { get; set; }
     public Action CutButtonClicked { get; set; }
     public Action DeleteButtonClicked { get; set; }
@@ -49,6 +51,7 @@ public class TextEditorViewModel : ViewModelBase
         _lexemeViewModels = new ObservableCollection<LexemeViewModel>();
         CloseCommand = new RelayCommand<object>(CloseExecute);
         AutoFixCommand = new RelayCommand<object>(AutoFixExecute);
+        _localizationProvider = LocalizationProvider.Instance;
         _errorsCount = 0;
     }
 
@@ -207,29 +210,39 @@ public class TextEditorViewModel : ViewModelBase
 
     public void StartAnalyzation()
     {
-        this._lexemeViewModels.Clear();
-        _compilationErrors.Clear();
-
-
-        //List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
-        List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
-
-        _compiledString = FileContents;
-        _parsingErrors = errors;
-
-        ErrorsCount = errors.Count;
-
-        /*foreach (Lexeme lexeme in lexemes)
+        try
         {
-            _lexemeViewModels.Add(new LexemeViewModel(lexeme));
-        }*/
+            this._lexemeViewModels.Clear();
+            _compilationErrors.Clear();
 
-        for (int i = 0; i < errors.Count; i++)
-        {
-            _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i]));
+
+            List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
+            List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
+
+            _compiledString = FileContents;
+            _parsingErrors = errors;
+
+            ErrorsCount = errors.Count;
+
+            foreach (Lexeme lexeme in lexemes)
+            {
+                _lexemeViewModels.Add(new LexemeViewModel(lexeme));
+            }
+
+            for (int i = 0; i < errors.Count; i++)
+            {
+                _compilationErrors.Add(new CompilationErrorViewModel(i + 1, errors[i]));
+            }
+
+            UpdateErrorsCounter?.Invoke(this, ErrorsCount);
         }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
 
-        UpdateErrorsCounter?.Invoke(this, ErrorsCount);
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void CloseExecute(object obj)
@@ -239,9 +252,19 @@ public class TextEditorViewModel : ViewModelBase
 
     private void AutoFixExecute(object obj)
     {
-        FileContents = _compilerUseCase.AutoFix(_compiledString);
-        TextDocument = new TextDocument(FileContents);
-        _compiledString = FileContents;
-        this.StartAnalyzation();
+        try
+        {
+            FileContents = _compilerUseCase.AutoFix(_compiledString);
+            TextDocument = new TextDocument(FileContents);
+            _compiledString = FileContents;
+            this.StartAnalyzation();
+        }
+        catch (Exception ex)
+        {
+            string message = _localizationProvider.GetStringByCode("ExceptionMessage");
+            string header = _localizationProvider.GetStringByCode("ExceptionHeader");
+
+            MessageBox.Show(message + ex.Message, header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

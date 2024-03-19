@@ -25,7 +25,7 @@ namespace Compiler
         protected override void OnStartup(StartupEventArgs e)
         {
             CompilerViewModel compilerViewModel = new CompilerViewModel(new FileUseCase(new FileService()),
-                new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService(new StringLexer(), new Parser())),
+                new TextUseCase(new TextService()), new CompilerUseCase(new CompilerService(new Lexer(), new Parser())),
                 new ReferenceUseCase(new ReferenceService()));
             this.MainWindow = new CompilerWindow(compilerViewModel);
             

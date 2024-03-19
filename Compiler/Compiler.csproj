@@ -131,6 +131,14 @@
       <Content Include="references\code-ru-RU.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Page Remove="locals\ru-RU.xaml" />
+      <Content Include="locals\ru-RU.xaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Page Remove="locals\en-US.xaml" />
+      <Content Include="locals\en-US.xaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
