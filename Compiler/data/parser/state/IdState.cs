@@ -22,7 +22,7 @@ public class IdState : IState
     {
         int startIndex = i;
         
-        ErrorFragments.Clear();
+        ErrorFragments = new List<ErrorFragment>();
         bool addNewErrorFragment = true;
         bool foundId = false;
 

@@ -23,7 +23,7 @@ public class CompilationErrorViewModel : ViewModelBase
     {
         _index = index;
         
-        if (parsingError.ParsingErrorType == ParsingErrorType.Regular)
+        if (parsingError.ParsingErrorType == ParsingErrorType.Regular && parsingError.Errors.Count != 0)
         {
             _startIndex = parsingError.Errors.First().StartIndex;
             _endIndex = parsingError.Errors.Last().EndIndex;

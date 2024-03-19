@@ -37,7 +37,8 @@ public class LocalizationProvider : ILocalizationProvider
     
     public string GetStringByCode(string code)
     {
-        string path = $"C:\\Users\\thenorth\\RiderProjects\\Compiler\\Compiler\\locals\\{_currentLocalizationCode}.xaml";
+        string path = $"C:\\Users\\gorshkov.2021\\RiderProjects\\Compiler\\Compiler\\locals\\{_currentLocalizationCode}.xaml";
+        
         if (!Path.Exists(path))
             throw new FileNotFoundException("Localization file not found");
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,12 @@ namespace Compiler
 
             Application.Current.Resources.MergedDictionaries.Add(local);
             InitializeComponent();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _vm.ExitCommand.Execute(null);
+            base.OnClosing(e);
         }
 
         public CompilerWindow(CompilerViewModel compilerViewModel) : this()

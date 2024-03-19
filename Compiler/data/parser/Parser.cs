@@ -65,13 +65,27 @@ public class Parser : IParser
     {
         if (parsingError != null)
         {
-            foreach (ErrorFragment fragment in parsingError.Errors)
+            for (int j = 0; j < parsingError.Errors.Count; j++)
             {
+                ErrorFragment fragment = parsingError.Errors[j];
                 int length = fragment.EndIndex - fragment.StartIndex + 1;
+                
                 input = input.Remove(fragment.StartIndex, length);
                 i -= length;
-            }  
+                
+                FixStartIndex(j, length, parsingError);
+            }
         }
+    }
+
+    private void FixStartIndex(int fragmentErrorIndex, int length, ParsingError? parsingError)
+    {
+        fragmentErrorIndex++;
+        for (; fragmentErrorIndex < parsingError.Errors.Count; fragmentErrorIndex++)
+        {
+            parsingError.Errors[fragmentErrorIndex].StartIndex -= length;
+            parsingError.Errors[fragmentErrorIndex].EndIndex -= length;
+        } 
     }
     
     private void CheckForUnfinishedString(List<ParsingError> parsingErrors)

@@ -21,7 +21,7 @@ public class StringState : IState
     {
         int startIndex = i;
 
-        ErrorFragments.Clear();
+        ErrorFragments = new List<ErrorFragment>();
         bool addNewErrorFragment = true;
         bool foundLexeme = false;
 

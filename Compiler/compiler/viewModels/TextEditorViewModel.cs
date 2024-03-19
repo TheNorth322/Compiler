@@ -211,7 +211,7 @@ public class TextEditorViewModel : ViewModelBase
         _compilationErrors.Clear();
 
 
-        List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
+        //List<Lexeme> lexemes = _compilerUseCase.Analyze(FileContents);
         List<ParsingError> errors = _compilerUseCase.Parse(FileContents);
 
         _compiledString = FileContents;
@@ -219,10 +219,10 @@ public class TextEditorViewModel : ViewModelBase
 
         ErrorsCount = errors.Count;
 
-        foreach (Lexeme lexeme in lexemes)
+        /*foreach (Lexeme lexeme in lexemes)
         {
             _lexemeViewModels.Add(new LexemeViewModel(lexeme));
-        }
+        }*/
 
         for (int i = 0; i < errors.Count; i++)
         {

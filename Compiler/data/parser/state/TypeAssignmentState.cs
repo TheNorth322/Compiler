@@ -22,7 +22,7 @@ public class TypeAssignmentState : IState
     public ParsingError? Parse(ref int i, string input)
     {
         _currentLiterIndex = 0;
-        ErrorFragments.Clear();
+        ErrorFragments = new List<ErrorFragment>();
 
         bool foundLexeme = false;
         bool addNewErrorFragment = true;
