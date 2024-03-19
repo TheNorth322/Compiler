@@ -115,37 +115,80 @@ Const he11oWorld:string='Hello World';
 ```
 
 ## Разработанная грамматика
-G[<СК>] = { V<sub>T</sub>, V<sub>N</sub>, P, <СК> }
+G[<SC>] = { V<sub>T</sub>, V<sub>N</sub>, P, <СК> }
 
-V<sub>T</sub> = { 'Const', 'string', 'a'...'z', 'A'...'Z', '0'...'9', ':', '=', ';', '_', ' ' }
+V<sub>T</sub> = {“Const”, “string”, “a”…”z”, “A”…”Z”, “0”...”9”, “:”, “=”, “;”, “_”, “’”, “ “}
 
-V<sub>N</sub> = { ID_SPACE, ID, TYPE_ASSIGN, TYPE, ASSIGN, STRING_BEGIN, STRING, STRING_END, END_EXPR }
+V<sub>N</sub> = {‹SC›, ‹IdSpace›, ‹Id›, ‹TypeAssign›, ‹Type›, ‹Assign›, ‹StringBegin›, ‹String›, ‹StringEnd›, ‹EndExpr›, ‹Digit›, ‹Letter›}
 
 P: 
-1) <СК> -> 'Const' ID_SPACE
-2) ID_SPACE -> ' ' ID
-3) ID -> letter { letter | digit | '_' } TYPE_ASSIGN
-4) TYPE_ASSIGN -> : TYPE
-5) TYPE -> 'string' ASSIGN
-6) ASSIGN -> '=' STRING_BEGIN
-7) STRING_BEGIN -> ''' STRING
-8) STRING -> { letter | digit } STRING_END
-9) STRING_END -> ''' END_EXPR
-10) END_EXPR -> ;
-11) digit -> '0' | '1' | ... | '9'
-12) letter -> 'a' | ... | 'z' | 'A' | ... | 'Z'
+1.	‹SC› → “Const”‹IdSpace›
+2.	‹IdSpace› → “ “‹Id›
+3.	‹Id› → ‹Letter›{‹Letter›|‹Digit›|“_”}‹TypeAssign›
+4.	‹TypeAssign› → “:”‹Type›
+5.	‹Type› → “string”‹Assign›
+6.	‹Assign› → “=”‹StringBegin›
+7.	‹StringBegin› → “’”‹String›
+8.	‹String› → {‹Letter›|‹Digit›}|‹StringEnd›
+9.	‹StringEnd› → “’”‹EndExpr›
+10.	‹EndExpr› → “;”
+-	‹Digit› → “0” | “1” | “2” | “3” | “4” | “5” | “6” | “7” | “8” | “9”
+-	‹Letter› → “a” | “b” | “c” | ... | “z” | “A” | “B” | “C” | ... | “Z”
    
 ## Классификация грамматики
-![linked_diagram (1)](https://github.com/TheNorth322/Compiler/assets/70006380/4a9fcdb4-7590-42a5-809f-f334e13de541)
-
-Согласно классификации Хомского, грамматика G[<СК>] является полностью автоматной.
+Согласно классификации Хомского, грамматика G[‹SC›] является автоматной.
+Правила (1)-(9) относятся к классу праворекурсивных продукций (A → aB | a | ε):
+1.	‹SC› → “Const”‹IdSpace›
+2.	‹IdSpace› → “ “‹Id›
+3.	‹Id› → ‹Letter›{‹Letter›|‹Digit›|“_”}‹TypeAssign›
+4.	‹TypeAssign› → “:”‹Type›
+5.	‹Type› → “string”‹Assign›
+6.	‹Assign› → “=”‹StringBegin›
+7.	‹StringBegin› → “’”‹String›
+8.	‹String› → {‹Letter›|‹Digit›}|‹StringEnd›
+9.	‹StringEnd› → “’”‹EndExpr›
 
 ## Граф конечного автомата
-![Граф конечного автомати (2)](https://github.com/TheNorth322/Compiler/assets/70006380/4a64ffee-d5af-4880-8adf-7337c2a8ce96)
+![image](https://github.com/TheNorth322/Compiler/assets/70006380/b92f38c3-477c-4840-b5c6-8d219de5ce77)
 
 ## Тестовые примеры
 1. Пример №1
-   ![image](https://github.com/TheNorth322/Compiler/assets/70006380/1aa3cc1e-2c58-4838-b7a2-becc073811e9)
+   ![image](https://github.com/TheNorth322/Compiler/assets/70006380/b573af93-6529-4b73-b786-d58d693b6700)
+   
+2. Пример №2
+   ![Пример №2](https://github.com/TheNorth322/Compiler/assets/70006380/28a68ded-fd0e-4b2f-8b4a-450de135e7b5)
+
+3. Пример №3
+   ![Пример №3](https://github.com/TheNorth322/Compiler/assets/70006380/f0bcc473-aa01-402e-90f7-6d01bb24a4ad)
+
+# Лабораторная работа №4 Нейтрализация ошибок (метод Айронса)
+**Тема лабораторной работы:** Нейтрализация ошибок (метод Айронса).
+**Цель работы:** Реализовать алгоритм нейтрализации синтаксических ошибок и дополнить им программную реализацию парсера.
+**Задание:** Реализовать алгоритм синтаксического анализа с нейтрализацией ошибок (метод Айронса).
+
+## Персональный вариант
+Объявление и инициализация строковой константы на языке Pascal
+Пример входной строки: Const Stroka: string = 'Привет';
+
+## Метод Айронса
+Разрабатываемый синтаксический анализатор построен на базе автоматной грамматики. При нахождении лексемы, которая не соответствует грамматике предлагается свести алгоритм нейтрализации к последовательному удалению следующего символа во входной цепочке до тех пор, пока следующий символ не окажется одним из допустимых в данный момент разбора.
+
+Этот алгоритм был мной уже реализован в Лабораторной работе №3. В таблице ошибок выводятся их местоположение и текст ошибки, содержащий информацию об отброшенном фрагменте.
+
+## Тестовые примеры
+1. Пример №1 (до нажатия на кнопку исправления и после)
+   ![Пример №1](https://github.com/TheNorth322/Compiler/assets/70006380/0af29645-d736-45d6-b3ad-7e972c0fb0bc)
+   ![Пример №1 Метод Айронса](https://github.com/TheNorth322/Compiler/assets/70006380/dab308c4-815f-4330-bdbc-ca43f3d8317c)
+2. Пример №2 (до нажатия на кнопку исправления и после)
+   ![Пример №2](https://github.com/TheNorth322/Compiler/assets/70006380/2df3c829-bfc1-4119-8374-23a3ad585009)
+   ![Пример №2 Метод Айронса](https://github.com/TheNorth322/Compiler/assets/70006380/c6e62050-976d-40b4-acf6-d1cc93467940)
+3. Пример №3 (до нажатия на кнопку исправления и после)
+   ![Пример №3](https://github.com/TheNorth322/Compiler/assets/70006380/c50b08a5-e27b-4c74-bc7c-bdba7096ec19)
+   ![Пример №3 Метод Айронса](https://github.com/TheNorth322/Compiler/assets/70006380/5d24000b-0ffd-42a4-95de-1488b9d34b80)
+
+
+   
+
 
 
 
